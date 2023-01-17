@@ -57,7 +57,6 @@ arcade.draw_line(225, 200, 265, 200, arcade.color.COCOA_BROWN, 3)
 # Inside window (left)
 arcade.draw_lrtb_rectangle_filled(75, 95, 225, 205, arcade.color.WHITE)
 
-
 # Inside window (right)
 arcade.draw_lrtb_rectangle_filled(235, 255, 225, 205, arcade.color.WHITE)
 
@@ -79,10 +78,7 @@ arcade.draw_rectangle_filled(500, 180, 30, 80, arcade.color.BROWN)
 arcade.draw_circle_filled(500, 230, 50, arcade.color.GREEN)
 
 
-
 arcade.finish_render()
-
-
 
 # Keep window open
 arcade.run()
