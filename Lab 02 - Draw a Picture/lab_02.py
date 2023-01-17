@@ -33,6 +33,7 @@ arcade.draw_lrtb_rectangle_filled(220, 255, 230, 200, arcade.color.BROWN)
 # Roof from triangle with 3 points
 
 
+arcade.finish_render()
 
 
 
@@ -41,6 +42,5 @@ arcade.draw_lrtb_rectangle_filled(220, 255, 230, 200, arcade.color.BROWN)
 
 
 
-
-# Keeps window open
+# Keep window open
 arcade.run()
