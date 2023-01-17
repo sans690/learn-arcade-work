@@ -79,6 +79,5 @@ arcade.draw_circle_filled(500, 230, 50, arcade.color.GREEN)
 
 
 arcade.finish_render()
-
 # Keep window open
 arcade.run()
