@@ -49,20 +49,38 @@ arcade.draw_lrtb_rectangle_filled(230, 260, 230, 200, arcade.color.BROWN)
 arcade.draw_triangle_filled(10, 300, 170, 400, 315, 300, arcade.color.BROWN)
 
 # Lines on window (left)
+arcade.draw_line(65, 200, 105, 200, arcade.color.COCOA_BROWN, 3)
 
 # Lines on window (right)
+arcade.draw_line(225, 200, 265, 200, arcade.color.COCOA_BROWN, 3)
+
+# Inside window (left)
+arcade.draw_lrtb_rectangle_filled(75, 95, 225, 205, arcade.color.WHITE)
 
 
+# Inside window (right)
+arcade.draw_lrtb_rectangle_filled(235, 255, 225, 205, arcade.color.WHITE)
 
+# Lines inside window (left)
+# Hor
+arcade.draw_line(70, 215, 100, 215, arcade.color.BROWN, 2)
+# Ver
+arcade.draw_line(85, 230, 85, 202, arcade.color.BROWN, 2)
+
+# Lines inside window (right)
+# Hor
+arcade.draw_line(230, 215, 260, 215, arcade.color.BROWN, 2)
+# Ver
+arcade.draw_line(245, 230, 245, 202, arcade.color.BROWN, 2)
+
+# Tree
+arcade.draw_rectangle_filled(500, 180, 30, 80, arcade.color.BROWN)
+#   Leaves for tree
+arcade.draw_circle_filled(500, 230, 50, arcade.color.GREEN)
 
 
 
 arcade.finish_render()
-
-
-
-
-
 
 
 
