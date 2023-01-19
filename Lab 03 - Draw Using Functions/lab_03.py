@@ -1,47 +1,39 @@
 import arcade
 
-Screen_Width = 1000
-Screen_Height = 800
+screen_width = 1000
+screen_height = 800
 
 
-def snow_man(x, y):
-    """Draw a snow man"""
-    # Point for x, y for reference
-    arcade.draw_point(x, y, arcade.color.RED, 5)
+# Draw face
+# Circle
+def draw_face(x, y):
+    arcade.draw_circle_filled(90 + x, 100 + y, 60, arcade.color.YELLOW)
 
-    # snow
-    arcade.draw_circle_filled(x + 20, 60 + y, 60, arcade.color.SNOW)
-    arcade.draw_circle_filled(x + 20, 135 + y, 50, arcade.color.SNOW)
-    arcade.draw_circle_filled(x + 20, 195 + y, 40, arcade.color.SNOW)
+    # Draw Eyebrow
+    arcade.draw_line(50 + x, 120 + y, 70 + x, 110 + y, arcade.color.BLACK, 6)
+    arcade.draw_line(110 + x, 110 + y, 130 + x, 120 + y, arcade.color.BLACK, 6)
+    # Draw Eyes
+    arcade.draw_circle_filled(60 + x, 105 + y, 8, arcade.color.BLACK)
+    arcade.draw_circle_filled(120 + x, 105 + y, 8, arcade.color.BLACK)
 
-    # eyes
-    arcade.draw_circle_filled(5 + x, 200 + y, 5, arcade.color.BLACK)
-    arcade.draw_circle_filled(35 + x, 200 + y, 5, arcade.color.BLACK)
+    # Draw Mouth
+    arcade.draw_arc_outline(90 + x, 75 + y, screen_width - 950, screen_height / 40, arcade.color.BLACK, 0, 180, 8)
 
-
-def grass():
-    arcade.draw_lrtb_rectangle_filled(0, Screen_Width, Screen_Height / 3, 0, arcade.color.BONE)
-
-
-def on_draw(delta_time):
-    arcade.start_render()
-    grass()
-    snow_man(on_draw.snow_man1_x, 140)
-    snow_man(450, 180)
-    snow_man(600, 160)
-
-    on_draw.snow_man1_x += 1
-
-
-on_draw.snow_man1_x = 150
-
+    # Draw Glasses
+    arcade.draw_rectangle_outline(60 + x, 105 + y, screen_width / 30, screen_height / 35, arcade.color.BLACK, 3)
+    arcade.draw_rectangle_outline(120 + x, 105 + y, screen_width / 30, screen_height / 35, arcade.color.BLACK, 3)
+    arcade.draw_line(75 + x, 105 + y, 105 + x, 105 + y, arcade.color.BLACK, 3)
 
 def main():
-    arcade.open_window(Screen_Width, Screen_Height, "Drawing Example")
+    arcade.open_window(screen_width, screen_height, "Drawing Example")
     arcade.set_background_color(arcade.color.AIR_SUPERIORITY_BLUE)
+    draw_face(106, 362)
+    draw_face(325, 250)
+    draw_face(614, 622)
+    draw_face(821, 255)
 
-    # Finish and run program
-    arcade.schedule(on_draw, 1 / 60)
+    # To run and finish program
+    arcade.finish_render()
     arcade.run()
 
 
