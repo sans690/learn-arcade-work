@@ -1,7 +1,7 @@
 import arcade
 
-screen_width = 1000
-screen_height = 800
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 800
 
 
 # Draw face
@@ -17,11 +17,11 @@ def draw_face(x, y):
     arcade.draw_circle_filled(120 + x, 105 + y, 8, arcade.color.BLACK)
 
     # Draw Mouth
-    arcade.draw_arc_outline(90 + x, 75 + y, screen_width - 950, screen_height / 40, arcade.color.BLACK, 0, 180, 8)
+    arcade.draw_arc_outline(90 + x, 75 + y, SCREEN_WIDTH - 950, SCREEN_HEIGHT / 40, arcade.color.BLACK, 0, 180, 8)
 
     # Draw Glasses
-    arcade.draw_rectangle_outline(60 + x, 105 + y, screen_width / 30, screen_height / 35, arcade.color.BLACK, 3)
-    arcade.draw_rectangle_outline(120 + x, 105 + y, screen_width / 30, screen_height / 35, arcade.color.BLACK, 3)
+    arcade.draw_rectangle_outline(60 + x, 105 + y, SCREEN_WIDTH / 30, SCREEN_HEIGHT / 35, arcade.color.BLACK, 3)
+    arcade.draw_rectangle_outline(120 + x, 105 + y, SCREEN_WIDTH / 30,  SCREEN_HEIGHT / 35, arcade.color.BLACK, 3)
     arcade.draw_line(75 + x, 105 + y, 105 + x, 105 + y, arcade.color.BLACK, 3)
 
 
@@ -64,7 +64,7 @@ on_draw.face8_y = 302
 
 
 def main():
-    arcade.open_window(screen_width, screen_height, "Drawing Example")
+    arcade.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, "Drawing Example")
     arcade.set_background_color(arcade.color.AIR_SUPERIORITY_BLUE)
 
     # To run and finish program
