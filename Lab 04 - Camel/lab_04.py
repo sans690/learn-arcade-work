@@ -20,6 +20,7 @@ def main():
     YES_DRINK = DRINKS_IN_CANTEEN - 1
     CAMEL_THIRST = 0
     USER_THIRST = 0
+
     # choices for user to pick from
     print("A. Drink from your canteen. ")
     print("B. Ahead moderate speed. ")
@@ -68,40 +69,41 @@ def main():
             print("Your thirst is", USER_THIRST)
         else:
             print("ERROR. ")
-        # you are thirsty
-        if USER_THIRST > 4:
-            print("You are thirsty! ")
-        # you die of thirst
-        if USER_THIRST > 6:
-            print("You died of thirst! ")
-            exit()
-        # camel is tired
-        if CAMEL_TIREDNESS > 5:
-            print("Your camel is getting tired. ")
-        # camel dies of exhaustion
-        if CAMEL_TIREDNESS > 8:
-            print("Your camel is dead of exhaustion!")
-        # natives caught you
-        if NATIVES_BEHIND_YOU == 0:
-            print("The natives have caught up! ")
-            exit()
-        # camel is thirsty
-        if CAMEL_THIRST > 5:
-            print("Camel getting thirsty! ")
-        # camel dies of thirst
-        if CAMEL_THIRST > 8:
-            print("Camel died of thirst! ")
-        # you beat the game
-        if MILES_TRAVELED == 200:
-            print("You win!")
-            exit()
-        # 1 / 20 of finding an oasis
-        for i in range(1):
 
-            if random.randrange(21) == 1:
-                print("You found an oasis! ")
-            else:
-                print("Found nothing. ")
+    # you are thirsty
+    if USER_THIRST > 4:
+        print("You are thirsty! ")
+    # you die of thirst
+    if USER_THIRST > 6:
+        print("You died of thirst! ")
+        exit()
+    # camel is tired
+    if CAMEL_TIREDNESS > 5:
+        print("Your camel is getting tired. ")
+    # camel dies of exhaustion
+    if CAMEL_TIREDNESS > 8:
+        print("Your camel is dead of exhaustion!")
+    # natives caught you
+    if NATIVES_BEHIND_YOU == 0:
+        print("The natives have caught up! ")
+        exit()
+    # camel is thirsty
+    if CAMEL_THIRST > 5:
+        print("Camel getting thirsty! ")
+    # camel dies of thirst
+    if CAMEL_THIRST > 8:
+        print("Camel died of thirst! ")
+    # you beat the game
+    if MILES_TRAVELED == 200:
+        print("You win!")
+        exit()
+    # 1 / 20 of finding an oasis
+    for i in range(1):
+
+        if random.randrange(21) == 1:
+            print("You found an oasis! ")
+        else:
+            print("Found nothing. ")
 
 
 main()
