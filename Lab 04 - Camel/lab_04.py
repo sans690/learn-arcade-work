@@ -100,7 +100,7 @@ def main():
 
     # 1 / 20 of finding an oasis
     for i in range(1):
-        if random.randrange(2) == 1:
+        if random.randrange(21) == 1:
             print("You found an oasis! ")
             if CAMEL_TIREDNESS > 0:
                 CAMEL_TIREDNESS = 0
