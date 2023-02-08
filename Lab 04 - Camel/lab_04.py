@@ -96,12 +96,27 @@ def main():
     # you beat the game
     if MILES_TRAVELED == 200:
         print("You win!")
-        exit()
+        DONE = True
+
     # 1 / 20 of finding an oasis
     for i in range(1):
-
-        if random.randrange(21) == 1:
+        if random.randrange(2) == 1:
             print("You found an oasis! ")
+            if CAMEL_TIREDNESS > 0:
+                CAMEL_TIREDNESS = 0
+                print("Your camel is no longer tired. ")
+            elif CAMEL_TIREDNESS == 0:
+                print("Your camel's tiredness is already at zero. ")
+            if USER_THIRST > 0:
+                USER_THIRST = 0
+                print("You are no longer thirsty. ")
+            elif USER_THIRST == 0:
+                print("You drank water, and it did nothing. ")
+            if DRINKS_IN_CANTEEN == 3:
+                print("Your canteen is already at max. ")
+            elif DRINKS_IN_CANTEEN == 0 or DRINKS_IN_CANTEEN == 1 or DRINKS_IN_CANTEEN == 2:
+                print("You refill your canteen. ")
+                DRINKS_IN_CANTEEN = 0
         else:
             print("Found nothing. ")
 
