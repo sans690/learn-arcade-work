@@ -33,6 +33,7 @@ def main():
         USER_INPUT = input("What is your choice?")
 
         # user picks e = status
+        # need moderate and full speed to be printed as miles when e is selected
         if USER_INPUT.upper() == "E":
             print("\nMiles traveled:", MILES_TRAVELED)
             print("Drinks in canteen:", DRINKS_IN_CANTEEN)
