@@ -33,7 +33,6 @@ def main():
         USER_INPUT = input("What is your choice?")
 
         # user picks e = status
-        # need moderate and full speed to be printed as miles when e is selected
         if USER_INPUT.upper() == "E":
             print("\nMiles traveled:", MILES_TRAVELED)
             print("Drinks in canteen:", DRINKS_IN_CANTEEN)
@@ -45,6 +44,7 @@ def main():
             print("\nGame will end now!")
             # End game
             DONE = True
+            continue
 
         # user picks d = rest for night
         elif USER_INPUT.upper() == "D":
@@ -55,24 +55,28 @@ def main():
 
         # user picks c = full speed
         elif USER_INPUT.upper() == "C":
-            print("\nYou travel", MILES_TRAVELED + FULL_SPEED, "miles.")
+            MILES_TRAVELED += random.randrange(10, 21)
+            print("\nYou travel", MILES_TRAVELED, "miles.")
             CAMEL_THIRST = CAMEL_THIRST + 1
             print("Camel's thirst is", CAMEL_THIRST)
             USER_THIRST = USER_THIRST + 1
             print("Your thirst is", USER_THIRST)
             CAMEL_TIREDNESS = CAMEL_TIREDNESS + 1
             print("Camel's tiredness is", CAMEL_TIREDNESS)
-            NATIVES_BEHIND_YOU = NATIVES_BEHIND_YOU + random.randrange(7, 15)
-            print("The native are now", MILES_TRAVELED - NATIVES_BEHIND_YOU, "miles behind you.\n")
+            NATIVES_BEHIND_YOU += random.randrange(5, 15)
+            print("The native are now", NATIVES_BEHIND_YOU, "miles behind you.\n")
 
         # user picks b = moderate speed
         elif USER_INPUT.upper() == "B":
-            print("The native are now", MILES_TRAVELED + MODERATE_SPEED, "miles behind you.\n")
-            print("\nYou travel", MODERATE_SPEED, "miles.")
+            MILES_TRAVELED += random.randrange(5, 13)
+            print("The native are now", MILES_TRAVELED, "miles behind you.\n")
+            print("\nYou travel", MILES_TRAVELED, "miles.")
             CAMEL_THIRST = CAMEL_THIRST + 1
             print("Camel's thirst is", CAMEL_THIRST)
             USER_THIRST = USER_THIRST + 1
             print("Your thirst is", USER_THIRST)
+            NATIVES_BEHIND_YOU += random.randrange(7, 15)
+            print("The native are now", NATIVES_BEHIND_YOU, "miles behind you.\n")
 
         # user picks a = drink from canteen
         elif USER_INPUT.upper() == "A":
@@ -99,7 +103,7 @@ def main():
         # you die of thirst
         if USER_THIRST > 6 and not DONE:
             print("You died of thirst!")
-            exit()
+            break
 
         # camel is tired
         if CAMEL_TIREDNESS > 5 and not DONE and not USER_INPUT.upper() == "E":
@@ -108,12 +112,12 @@ def main():
         # camel dies of exhaustion
         if CAMEL_TIREDNESS > 8 and not DONE:
             print("Your camel is died of exhaustion!")
-            DONE = True
+            break
 
         # natives caught you
-        if NATIVES_BEHIND_YOU == 0 and not DONE:
+        if NATIVES_BEHIND_YOU >= MILES_TRAVELED and not DONE:
             print("The natives have caught up!")
-            DONE = True
+            break
 
         # camel is thirsty
         if CAMEL_THIRST == 4 or CAMEL_THIRST == 5 and not DONE and not USER_INPUT.upper() == "E":
@@ -122,12 +126,12 @@ def main():
         # camel dies of thirst
         elif CAMEL_THIRST > 8 and not DONE:
             print("Your camel died of thirst!")
-            DONE = True
+            break
 
         # you beat the game
         if MILES_TRAVELED >= 200 and not DONE:
             print("\nYou win!\n")
-            DONE = True
+            break
 
         # 1 / 20 of finding an oasis
         if not DONE and random.randrange(1, 21) == 1:
