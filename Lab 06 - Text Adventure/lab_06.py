@@ -37,19 +37,15 @@ def main():
     while Done is False:
         # while the program is not finish do this code
         print(room_list[current_room].description)
-        print("")
         # prompts the user a question to which they respond with a direction
-        user_input = input("What is your direction? (Enter in letters or full direction name): ")
-        print("")
-
-        # user picks to move north with an input of "N" or "NORTH"
-        if user_input.upper() == "N" or user_input.upper() == "NORTH" or user_input == "NoRtH":
+        direction = input("Which way would you like to go? (n s e w)\n").lower()
+        if direction[0] == "n":
             # the next room is equal to the parameter north in current room
             next_room = room_list[current_room].north
-            print("")
             # if next_room is None, you can't move that direction
             if next_room is None:
                 print("You can't move north.")
+                continue
             # if there is a room to move to in that direction, you can move that direction
             elif next_room == room_list[current_room].north:
                 print("You moved to the north.")
@@ -57,49 +53,51 @@ def main():
                 current_room = next_room
 
         # if user doesn't pick north, then user can pick to move east with input
-        elif user_input.upper() == "E" or user_input.upper() == "EAST" or user_input == "EaSt":
+        elif direction[0] == "e":
             # the next room is equal to the parameter east in current room
             next_room = room_list[current_room].east
             # if next_room is None, you can't move that direction
             if next_room is None:
                 print("You can't move east.")
+                continue
             elif next_room == room_list[current_room].east:
                 print("You moved to the east.")
                 # if able to move, the room you move to is now your current room
                 current_room = next_room
 
         # if user doesn't pick north or east, then user can pick to move south with input
-        elif user_input.upper() == "S" or user_input.upper() == "SOUTH" or user_input == "SoUtH":
+        elif direction[0] == "s":
             # the next room is equal to the parameter south in current room
             next_room = room_list[current_room].south
             # if next_room is None, you can't move that direction
             if next_room is None:
                 print("You can't move south.")
+                continue
             elif next_room == room_list[current_room].south:
                 print("You moved to the south.")
                 # if able to move, the room you move to is now your current room
                 current_room = next_room
 
         # if user doesn't pick north, east, or south, then user can pick to move west with input
-        elif user_input.upper() == "W" or user_input.upper() == "WEST" or user_input == "WeSt":
+        elif direction[0] == "w":
             # the next room is equal to the parameter west in current room
             next_room = room_list[current_room].west
             # if next_room is None, you can't move that direction
             if next_room is None:
                 print("You can't move west.")
+                continue
             elif next_room == room_list[current_room].west:
                 print("You moved to the west.")
                 # if able to move, the room you move to is now your current room
                 current_room = next_room
 
         # if user doesn't pick north, east, south, or west, then user can pick to quit the game
-        elif user_input.upper() == "Q" or user_input.upper() == "Quit" or user_input == "QuIt":
-            print("\nQuiting game.")
+        elif direction[0] == "q":
+            print("Quiting game.")
             exit()
-
         # any other input is invalid
         else:
-            print("\nInvalid input!")
+            print("Invalid input!")
 
 
 main()
