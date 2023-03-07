@@ -16,14 +16,14 @@ def main():
     current_room = 0
     # defining what rooms there are/ where they have doors if any and adding them to the list
     room_list = []
-    room_0 = Room("You are in the second bedroom.\nThere is a door to the east.", None, 1, None, None)
+    room_0 = Room("You are in the living room.\nThere is a door to the east.", None, 1, None, None)
     room_list.append(room_0)
     room_1 = Room("You are in the south hallway.\nThere is a door to the west and east and an opening to the north.",
                   4, 2, None, 0)
     room_list.append(room_1)
     room_2 = Room("You are in the dining room.\nThere is a door to the west.", None, None, None, 1)
     room_list.append(room_2)
-    room_3 = Room("You are in the first bedroom.\nThere is a door to the east.", None, 4, None, None)
+    room_3 = Room("You are in the master bedroom.\nThere is a door to the east.", None, 4, None, None)
     room_list.append(room_3)
     room_4 = Room("You are in the north hallway.\nThere is a door to the west and east and an opening to the south.",
                   6, 5, 1, 3)
