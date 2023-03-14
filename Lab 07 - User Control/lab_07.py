@@ -95,20 +95,20 @@ class Face:
         # when limit is hit a sound will play
         # keeps face from moving past limit of window to the left on x-axis
         if self.position_x < self.radius:
-            self.position_x = self.radius
             arcade.play_sound(laser_sound)
+            self.position_x = self.radius
         # keeps face from moving past limit of window to the right on x-axis
         elif self.position_x > SCREEN_WIDTH - self.radius:
-            self.position_x = SCREEN_WIDTH - self.radius
             arcade.play_sound(laser_sound)
+            self.position_x = SCREEN_WIDTH - self.radius
         # keeps face from moving past limit of window downward on y-axis
         elif self.position_y < self.radius:
-            self.position_y = self.radius
             arcade.play_sound(laser_sound)
+            self.position_y = self.radius
         # keeps face from moving past limit of window upward on y-axis
         elif self.position_y > SCREEN_HEIGHT - self.radius:
-            self.position_y = SCREEN_HEIGHT - self.radius
             arcade.play_sound(laser_sound)
+            self.position_y = SCREEN_HEIGHT - self.radius
 
 
 class MyGame(arcade.Window):
