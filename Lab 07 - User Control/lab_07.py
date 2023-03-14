@@ -23,7 +23,7 @@ class Hat:
         self.color = color
 
     # method that creates the hat structure and assigns some values to width and height
-    def draw_hat(self):
+    def draw(self):
         # top part of the hat
         arcade.draw_rectangle_filled(self.position_x, self.position_y, 40, 50, self.color)
         # bottom part of the hat
@@ -197,7 +197,7 @@ class MyGame(arcade.Window):
 
         # calls face instance to start rendering it
         self.face.draw()
-        self.hat.draw_hat()
+        self.hat.draw()
 
     # updates the class Face and Hat instances in class MyGame
     def update(self, delta_time):
