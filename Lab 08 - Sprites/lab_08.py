@@ -13,8 +13,8 @@ MOVEMENT_SPEED = 8
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
-coin_sound = arcade.load_sound("/Users/saniyahsmith/Downloads/arcade_resources_sounds_coin2.wav", False)
-water_bottle_sound = arcade.load_sound("/Users/saniyahsmith/Downloads/arcade_resources_sounds_error4.wav")
+coin_sound = arcade.load_sound("arcade_resources_sounds_coin2.wav", False)
+water_bottle_sound = arcade.load_sound("arcade_resources_sounds_error4.wav")
 
 
 class Coin(arcade.Sprite):
