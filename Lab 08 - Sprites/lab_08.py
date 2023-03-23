@@ -61,6 +61,21 @@ class Bottle(arcade.Sprite):
                 self.change_y *= -1
 
 
+class Player(arcade.Sprite):
+    def __init__(self, filename, sprite_scaling):
+        super().__init__(filename, sprite_scaling)
+        self.center_x = 0
+        self.center_y = 0
+        self.change_x = 0
+        self.change_y = 0
+        self.freeze = False
+
+    def update(self):
+        if not self.freeze:
+            self.center_x += self.change_x
+            self.center_y += self.change_y
+
+
 class MyGame(arcade.Window):
     """ Our custom Window Class"""
 
@@ -95,27 +110,23 @@ class MyGame(arcade.Window):
     # method of the class that will assign the values to the instance
     def setup(self):
         # assigns an image with the functionality of the Sprite class from arcade, creates an instance of Sprite
-        self.player_sprite = arcade.Sprite("/Users/saniyahsmith/Documents/GitHub/learn-arcade-work/Lab 08 - "
-                                           "Sprites/output2.png", SPRITE_SCALING_PLAYER)
+        self.player_sprite = Player("output2.png", SPRITE_SCALING_PLAYER)
 
         # assigns the position to the player_sprite
         self.player_sprite.center_x = 45
         self.player_sprite.center_y = 300
         # adds the player_sprite to the player_list
         self.player_sprite_list.append(self.player_sprite)
-        self.player_sprite_list.freeze = False
 
         # creates an instance and assigns values, it is also to the good_item_list
         # good item is a coin
         for i in range(COIN_COUNT):
             # assigns image to the instance
-            good_sprite = Coin(
-                "/Users/saniyahsmith/Documents/GitHub/learn-arcade-work/Lab 08 - Sprites/coinGold_ul.png",
-                SPRITE_SCALING_COIN)
+            good_sprite = Coin("coinGold_ul.png", SPRITE_SCALING_COIN)
             # assigns the position of the sprite
             good_sprite.center_x = random.randrange(10, SCREEN_WIDTH)
             good_sprite.center_y = random.randrange(10, SCREEN_HEIGHT)
-            good_sprite.change_x -= 2
+            good_sprite.change_x -= 0
             good_sprite.change_y += 2
             # add the good_sprite to the good_sprite_list
             self.good_item_list.append(good_sprite)
@@ -123,9 +134,7 @@ class MyGame(arcade.Window):
         # bad item is a water bottle
         for i in range(WATER_BOTTLE_COUNT):
             # assigns image to the instance
-            bad_sprite = Bottle("/Users/saniyahsmith/Documents/GitHub/learn-arcade-work/Lab 08 - Sprites/water.png",
-                                SPRITE_WATER_BOTTLE)
-
+            bad_sprite = Bottle("water.png", SPRITE_WATER_BOTTLE)
             # assigns position of sprite
             bad_sprite.center_x = random.randrange(SCREEN_WIDTH)
             bad_sprite.center_y = random.randrange(SCREEN_HEIGHT)
@@ -168,10 +177,16 @@ class MyGame(arcade.Window):
         if self.player_sprite.center_y > 583:
             self.player_sprite.center_y = 565
 
+        for g in good_item_hit_list:
+            if g.center_x and g.center_y > SCREEN_HEIGHT:
+                self.good_item_list.clear()
+
         # if the length of good_item_list is equal to 0, print text
         if len(self.good_item_list) == 0:
-            for g in self.bad_item_list:
-                g.freeze = True
+            for b in self.bad_item_list:
+                b.freeze = True
+            for p in self.player_sprite_list:
+                p.freeze = True
                 arcade.draw_text("Game Over", 300, 400, arcade.color.BLACK, 100, 10)
 
     # method that defines when key is being pressed
