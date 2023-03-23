@@ -176,18 +176,20 @@ class MyGame(arcade.Window):
         # stops user from moving outside window limit upward
         if self.player_sprite.center_y > 583:
             self.player_sprite.center_y = 565
-
-        for g in good_item_hit_list:
-            if g.center_x and g.center_y > SCREEN_HEIGHT:
+        # for items in good_item_list
+        # if the item's center x and y are greater than the screen height, clear the list
+        for g in self.good_item_list:
+            if g.center_x and g.center_y > SCREEN_HEIGHT + 650:
                 self.good_item_list.clear()
 
-        # if the length of good_item_list is equal to 0, print text
+        # if the length of good_item_list is equal to 0
         if len(self.good_item_list) == 0:
             for b in self.bad_item_list:
                 b.freeze = True
+                self.bad_item_list.clear()
             for p in self.player_sprite_list:
                 p.freeze = True
-                arcade.draw_text("Game Over", 300, 400, arcade.color.BLACK, 100, 10)
+                self.player_sprite_list.clear()
 
     # method that defines when key is being pressed
     def on_key_press(self, key: int, modifiers: int):
@@ -226,6 +228,10 @@ class MyGame(arcade.Window):
         # creates the score boards
         output = f" Score : {self.score}"
         arcade.draw_text(output, 10, 580, arcade.color.BLACK, 12, 10)
+        if len(self.good_item_list) == 0:
+            arcade.draw_text("Game Over", 250, 300, arcade.color.WHITE_SMOKE, 40, 5)
+            arcade.set_background_color(arcade.color.BLACK)
+
 
 
 def main():
