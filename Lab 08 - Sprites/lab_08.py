@@ -20,10 +20,8 @@ water_bottle_sound = arcade.load_sound("arcade_resources_sounds_error4.wav")
 class Coin(arcade.Sprite):
     def __init__(self, filename, sprite_scaling):
         super().__init__(filename, sprite_scaling)
-        # position of the good_sprite
         self.center_x = 0
         self.center_y = 0
-        # change in position of the good_sprite
         self.change_x = 0
         self.change_y = 0
         self.freeze = False
@@ -38,10 +36,8 @@ class Coin(arcade.Sprite):
 class Bottle(arcade.Sprite):
     def __init__(self, filename, sprite_scaling):
         super().__init__(filename, sprite_scaling)
-        # position if the bad_sprite
         self.center_x = 0
         self.center_y = 0
-        # change in the position of the bad_sprite
         self.change_x = 0
         self.change_y = 0
         self.freeze = False
@@ -184,10 +180,14 @@ class MyGame(arcade.Window):
 
         # if the length of good_item_list is equal to 0
         if len(self.good_item_list) == 0:
+            # for items in the good_item_list, freeze is true if the list is equal to 0
             for b in self.bad_item_list:
                 b.freeze = True
+                # clear the list if condition is met
                 self.bad_item_list.clear()
+            # for players in the player_sprite_list, freeze is true if the list is equal to 0
             for p in self.player_sprite_list:
+                # clear the list if condition is met
                 p.freeze = True
                 self.player_sprite_list.clear()
 
@@ -218,16 +218,20 @@ class MyGame(arcade.Window):
     def on_draw(self):
         arcade.start_render()
         arcade.set_background_color(arcade.color.WHITE_SMOKE)
+        # for players in play_sprite_list, draw
         for players in self.player_sprite_list:
             players.draw()
         self.player_sprite_list.draw()
+        # for items in good_item_list, draw
         for items in self.good_item_list:
             items.draw()
+        # for items in bad_item_list, draw
         for items in self.bad_item_list:
             items.draw()
         # creates the score boards
         output = f" Score : {self.score}"
         arcade.draw_text(output, 10, 580, arcade.color.BLACK, 12, 10)
+        # if the length of good_item_list equals 0, create the text and set background
         if len(self.good_item_list) == 0:
             arcade.draw_text("Game Over", 250, 300, arcade.color.WHITE_SMOKE, 40, 5)
             arcade.set_background_color(arcade.color.BLACK)
