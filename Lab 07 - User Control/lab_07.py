@@ -8,8 +8,8 @@ SCREEN_HEIGHT = 600
 MOVEMENT_SPEED = 3
 
 # defines the laser sound based the files that is given from the location on the computer
-laser_sound = arcade.load_sound("/Users/saniyahsmith/Downloads/laser.wav", False)
-mouse_click_sound = arcade.load_sound("/Users/saniyahsmith/Downloads/arcade_resources_sounds_hurt1.wav")
+laser_sound = arcade.load_sound("laser.wav", False)
+mouse_click_sound = arcade.load_sound("arcade_resources_sounds_hurt1.wav")
 
 
 # creates the class Hat
