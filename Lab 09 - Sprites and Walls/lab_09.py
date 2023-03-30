@@ -15,18 +15,19 @@ SPRITE_COIN_SCALING = 0.2
 SPRITE_GRASS_SCALING = 0.9
 # Amount
 COIN_COUNT = 50
-TREE_COUNT = 50
+TREE_COUNT = 30
 # Sound and the sound player
 coin_sound = arcade.load_sound("Lab 9 - Resources/sounds/arcade_resources_sounds_coin2.wav")
 coin_sound_player = None
+# sound from Nintendo
 theme_sound = arcade.load_sound("Lab 9 - Resources/sounds/Pallet Town Theme.wav", False)
 theme_sound_player = None
 bump_sound = arcade.load_sound("Lab 9 - Resources/sounds/jump.wav", False)
 bump_sound_player = None
 # how many pixels to keep between the character and screen edge
-VIEWPORT_MARGIN = 0
+VIEWPORT_MARGIN = 220
 # camera moves how fast to the player
-CAMERA_SPEED = 1
+CAMERA_SPEED = 0.8
 
 
 # Grass class inherits functionality of arcade.Sprite
@@ -145,13 +146,15 @@ class Crab(arcade.Sprite):
         # current y position = current y position plus the change
         self.center_y += self.change_y
 
+    # method in Crab class
     def follow_sprite(self, player_sprite):
-
+        # if center_y of Crab class is greater than player_sprite.center_y
         if self.center_y < player_sprite.center_y:
+            # center_y of Crab class = center_y of Crab class + min crab speed,
+            # player_sprite.center_y - center_y of Crab class
             self.center_y += min(MOVEMENT_CRAB_SPEED, player_sprite.center_y - self.center_y)
         elif self.center_y > player_sprite.center_y:
             self.center_y -= min(MOVEMENT_CRAB_SPEED, self.center_y - player_sprite.center_y)
-
         if self.center_x < player_sprite.center_x:
             self.center_x += min(MOVEMENT_CRAB_SPEED, player_sprite.center_x - self.center_x)
         elif self.center_x > player_sprite.center_x:
@@ -197,7 +200,6 @@ class MyGame(arcade.Window):
         self.house_hit_tree_list1 = arcade.SpriteList()
         self.crab_hit_list = arcade.SpriteList
 
-
     def setup(self):
         # sets background
         arcade.set_background_color(arcade.color.WHITE)
@@ -211,8 +213,8 @@ class MyGame(arcade.Window):
             # Keep trying until success
             while not coin_placed_successfully:
                 # Position the coin
-                coin.center_x = random.randrange(SCREEN_WIDTH)
-                coin.center_y = random.randrange(SCREEN_HEIGHT)
+                coin.center_x = random.randrange(30, SCREEN_WIDTH - 100)
+                coin.center_y = random.randrange(30, SCREEN_HEIGHT - 100)
                 # See if the coin is hitting a fence/wall
                 fence_hit_list = arcade.check_for_collision_with_list(coin, self.fence_list)
                 # See if the coin is hitting another coin
@@ -232,7 +234,7 @@ class MyGame(arcade.Window):
         self.fence_list.append(left_fence_corner_sprite)
         # instance creation
         left_fence_corner_sprite1 = Fence("Lab 9 - Resources/kenney_tiny-town/Tiles/tile_0044.png",
-                                           SPRITE_FENCE_SCALING)
+                                          SPRITE_FENCE_SCALING)
         # position
         left_fence_corner_sprite1.center_x = 385
         left_fence_corner_sprite1.center_y = 500
@@ -248,7 +250,7 @@ class MyGame(arcade.Window):
         self.fence_list.append(right_fence_corner_sprite)
         # instance creation
         right_fence_corner_sprite1 = Fence("Lab 9 - Resources/kenney_tiny-town/Tiles/tile_0046.png",
-                                            SPRITE_FENCE_SCALING)
+                                           SPRITE_FENCE_SCALING)
         # position
         right_fence_corner_sprite1.center_x = 700
         right_fence_corner_sprite1.center_y = 500
@@ -297,7 +299,7 @@ class MyGame(arcade.Window):
         self.fence_list.append(left_fence_corner_sprite)
         # instance creation
         left_fence_corner_sprite1 = Fence("Lab 9 - Resources/kenney_tiny-town/Tiles/tile_0044.png",
-                                           SPRITE_FENCE_SCALING)
+                                          SPRITE_FENCE_SCALING)
         # position
         left_fence_corner_sprite1.center_x = 385
         left_fence_corner_sprite1.center_y = 350
@@ -313,7 +315,7 @@ class MyGame(arcade.Window):
         self.fence_list.append(right_fence_corner_sprite)
         # instance creation
         right_fence_corner_sprite1 = Fence("Lab 9 - Resources/kenney_tiny-town/Tiles/tile_0046.png",
-                                            SPRITE_FENCE_SCALING)
+                                           SPRITE_FENCE_SCALING)
         # position
         right_fence_corner_sprite1.center_x = 700
         right_fence_corner_sprite1.center_y = 350
@@ -410,7 +412,7 @@ class MyGame(arcade.Window):
         self.fence_list.append(left_wall_corner_sprite1)
         # instance creation
         right_wall_corner_sprite1 = Fence("Lab 9 - Resources/kenney_tiny-town/Tiles/tile_0098.png",
-                                           SPRITE_FENCE_SCALING)
+                                          SPRITE_FENCE_SCALING)
         # position
         right_wall_corner_sprite1.center_x = 790
         right_wall_corner_sprite1.center_y = 590
@@ -472,7 +474,7 @@ class MyGame(arcade.Window):
             self.fence_list.append(middle_upward_fence_sprite)
         # instance creation
         right_fence_corner_sprite1 = Fence("Lab 9 - Resources/kenney_tiny-town/Tiles/tile_0046.png",
-                                            SPRITE_FENCE_SCALING)
+                                           SPRITE_FENCE_SCALING)
         # position
         right_fence_corner_sprite1.center_x = 300
         right_fence_corner_sprite1.center_y = 500
@@ -495,7 +497,7 @@ class MyGame(arcade.Window):
             self.fence_list.append(middle_upward_fence_sprite)
         # instance creation
         left_fence_corner_sprite1 = Fence("Lab 9 - Resources/kenney_tiny-town/Tiles/tile_0044.png",
-                                           SPRITE_FENCE_SCALING)
+                                          SPRITE_FENCE_SCALING)
         # position
         left_fence_corner_sprite1.center_x = 90
         left_fence_corner_sprite1.center_y = 500
@@ -580,17 +582,25 @@ class MyGame(arcade.Window):
                 grass_sprite.center_x = random.randint(20, SCREEN_WIDTH - 20)
                 grass_sprite.center_y = random.randint(20, SCREEN_HEIGHT - 20)
                 self.grass_list.append(grass_sprite)
+        """creates gravel path"""
+        for path in range(360, 390, 20):
+            # instance creation
+            gravel_sprite = Grass("Lab 9 - Resources/kenney_tiny-town/Tiles/tile_0043.png", SPRITE_GRASS_SCALING + 1)
+            gravel_sprite.center_x = 160
+            gravel_sprite.center_y = path
+            self.grass_list.append(gravel_sprite)
         """creates trees and checks for collisions"""
         for row in range(TREE_COUNT):
             tree_place_success = False
             while not tree_place_success:
                 # instance creation
                 tree_sprite = Grass("Lab 9 - Resources/kenney_tiny-town/Tiles/tile_0004.png", SPRITE_GRASS_SCALING)
-                tree_sprite.center_x = random.randrange(SCREEN_WIDTH)
+                tree_sprite.center_x = random.randrange(100, SCREEN_WIDTH)
                 tree_sprite.center_y = random.randrange(540)
                 tree_sprite1 = Grass("Lab 9 - Resources/kenney_tiny-town/Tiles/tile_0016.png", SPRITE_GRASS_SCALING)
                 tree_sprite1.center_x = tree_sprite.center_x
                 tree_sprite1.center_y = tree_sprite.center_y - 10
+                # collision checks
                 tree_hit_list = arcade.check_for_collision_with_list(tree_sprite, self.fence_list)
                 tree_hit_list1 = arcade.check_for_collision_with_list(tree_sprite1, self.fence_list)
                 tree_hit_list2 = arcade.check_for_collision_with_list(tree_sprite, self.tree_list)
@@ -606,7 +616,7 @@ class MyGame(arcade.Window):
         # variable that defines the image of the player, instance creation
         self.player_sprite = Player("Lab 9 - Resources/kenney_tiny-dungeon/Tiles/tile_0085.png", SPRITE_PLAYER_SCALING)
         # position
-        self.player_sprite.center_x = 100
+        self.player_sprite.center_x = 50
         self.player_sprite.center_y = 200
         # player_list adds the player_sprite to the player_list
         self.player_list.append(self.player_sprite)
@@ -628,6 +638,7 @@ class MyGame(arcade.Window):
 
     # when key is pressed, method in MyGame class
     def on_key_press(self, key: int, modifiers: int):
+        # condition
         if key == arcade.key.A:
             self.player_sprite.change_x = -MOVEMENT_SPEED
         elif key == arcade.key.D:
@@ -639,6 +650,7 @@ class MyGame(arcade.Window):
 
     # when key is released, method in MyGame class
     def on_key_release(self, key: int, modifiers: int):
+        # condition
         if key == arcade.key.A or key == arcade.key.D:
             self.player_sprite.change_x = 0
         elif key == arcade.key.W or key == arcade.key.S:
@@ -646,6 +658,8 @@ class MyGame(arcade.Window):
 
     # method in MyGame that will draw what is defined in the list
     def on_draw(self):
+        arcade.start_render()
+        # clears on_draw
         self.clear()
         # selects the camera to use for player sprite
         self.camera_sprite.use()
@@ -661,47 +675,51 @@ class MyGame(arcade.Window):
         self.camera_gui.use()
         # creates score board
         result = f" Score: {self.score}"
-        arcade.draw_text(self.score, 750, 550, arcade.color.BLACK, 20, 5)
+        arcade.draw_text(self.score, 750, 550, arcade.color.WHITE, 20, 5)
+        arcade.set_background_color((20, 20, 30))
 
-# method in the MyGame class that will update lists
+    # method in the MyGame class that will update lists
     def on_update(self, delta_time: float):
         self.player_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
+        # condition
         for coin in self.player_hit_list:
             coin.remove_from_sprite_lists()
             self.score += 1
             self.coin_sound_player = arcade.play_sound(coin_sound)
         self.player_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.fence_list)
+        # condition
         for hit in self.player_hit_list:
             arcade.play_sound(bump_sound, 100, 0, 0, 10 * 10)
         self.player_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.tree_list)
         self.player_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.house_list)
+        # condition
         for crab in self.npc_list:
+            # makes crab follow player
             crab.follow_sprite(self.player_sprite)
         # updates list
         self.coin_list.update()
         self.tree_list.update()
         self.house_list.update()
-        # update the physics_engine
+        # updates the physics_engine
         self.physics_engine.update()
         self.physics_engine1.update()
         self.physics_engine2.update()
         self.physics_engine3.update()
         self.physics_engine4.update()
-        # scroll screen to player
+        # scrolls screen to player
         self.scroll_to_player()
 
     def scroll_to_player(self):
-        position = Vec2(self.player_sprite.center_x - self.width / 2, self.player_sprite.center_y - self.height/2)
+        # based on where the player is, the camera will position to be centered on player
+        # so window width is 800, player is at 100, 800/2 = 400, 100 - 400 = -300, so camera will start at -300
+        position = Vec2(self.player_sprite.center_x - self.width / 2, self.player_sprite.center_y - self.height / 2)
+        # camera will move to position at set speed
         self.camera_sprite.move_to(position, CAMERA_SPEED)
 
     def on_resize(self, width: float, height: float):
-        # resizes the window
+        # resizes the window when player hits edge
         self.camera_sprite.resize(int(width), int(height))
         self.camera_gui.resize(int(width), int(height))
-
-
-
-
 
 
 def main():
