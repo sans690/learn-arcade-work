@@ -149,6 +149,7 @@ class MyGame(arcade.Window):
         self.physics_engine01 = None
         self.physics_engine02 = None
         self.physics_engine03 = None
+        self.physics_engine04 = None
         # variable that hold house info
         self.house_sprite = None
         # variable that hold score info
@@ -165,6 +166,11 @@ class MyGame(arcade.Window):
         self.house_list = arcade.SpriteList()
         self.player_hit_list = arcade.SpriteList()
         self.tree_list = arcade.SpriteList()
+        self.tree_hit_list = arcade.Sprite()
+        self.tree_hit_list1 = arcade.Sprite()
+        self.house_hit_tree_list = arcade.SpriteList()
+        self.house_hit_tree_list1 = arcade.SpriteList()
+        self.crab_hit_list = arcade.SpriteList
 
     def setup(self):
         # sets background
@@ -186,9 +192,8 @@ class MyGame(arcade.Window):
                 if len(fence_hit_list) == 0 and len(coin_hit_list) == 0:
                     # It is!
                     coin_placed_successfully = True
-            # Add the coin to the lists
-            self.coin_list.append(coin)
-
+                    # Add the coin to the lists
+                    self.coin_list.append(coin)
         """box fence 1"""
         # variables that defines the image of the fence, creates an instances of the class
         left_fence_corner_sprite = Fence("kenney_tiny-town/Tiles/tile_0068.png", SPRITE_FENCE_SCALING)
@@ -522,17 +527,30 @@ class MyGame(arcade.Window):
                 grass_sprite.center_x = random.randint(20, SCREEN_WIDTH - 20)
                 grass_sprite.center_y = random.randint(20, SCREEN_HEIGHT - 20)
                 self.grass_list.append(grass_sprite)
-        """creates trees"""
+
+        """creates trees and checks for collisions"""
         for row in range(TREE_COUNT):
+            tree_place_success = False
+            while tree_place_success == False:
                 # instance creation
                 tree_sprite = Grass("kenney_tiny-town/Tiles/tile_0004.png", SPRITE_GRASS_SCALING)
-                tree_sprite.center_x = random.randrange(740)
+                tree_sprite.center_x = random.randrange(710)
                 tree_sprite.center_y = random.randrange(540)
-                self.tree_list.append(tree_sprite)
                 tree_sprite1 = Grass("kenney_tiny-town/Tiles/tile_0016.png", SPRITE_GRASS_SCALING)
                 tree_sprite1.center_x = tree_sprite.center_x
                 tree_sprite1.center_y = tree_sprite.center_y - 10
-                self.tree_list.append(tree_sprite1)
+                tree_hit_list = arcade.check_for_collision_with_list(tree_sprite, self.fence_list)
+                tree_hit_list1 = arcade.check_for_collision_with_list(tree_sprite1, self.fence_list)
+
+                house_hit_tree_list = arcade.check_for_collision_with_list(tree_sprite, self.house_list)
+                house_hit_tree_list1 = arcade.check_for_collision_with_list(tree_sprite1, self.house_list)
+
+                if len(tree_hit_list) == 0 and len(tree_hit_list1) == 0 and len(house_hit_tree_list) == 0 and len(
+                        house_hit_tree_list1) == 0:
+                    tree_place_success = True
+
+                    self.tree_list.append(tree_sprite)
+                    self.tree_list.append(tree_sprite1)
 
         # variable that defines the image of the player, instance creation
         self.player_sprite = Player("kenney_tiny-dungeon/Tiles/tile_0085.png", SPRITE_PLAYER_SCALING)
@@ -547,7 +565,6 @@ class MyGame(arcade.Window):
         crab_sprite.center_x = 440
         crab_sprite.center_y = 440
         crab_sprite.change_x += 0.3
-        crab_hit_fence = arcade.check_for_collision_with_list(crab_sprite, self.fence_list)
         # player_list adds the npc_sprite to the npc_list
         self.npc_list.append(crab_sprite)
 
@@ -556,6 +573,7 @@ class MyGame(arcade.Window):
         self.physics_engine01 = arcade.PhysicsEngineSimple(crab_sprite, self.fence_list)
         self.physics_engine02 = arcade.PhysicsEngineSimple(self.player_sprite, self.house_list)
         self.physics_engine03 = arcade.PhysicsEngineSimple(self.player_sprite, self.tree_list)
+        self.physics_engine04 = arcade.PhysicsEngineSimple(crab_sprite, self.tree_list)
 
     # method in the MyGame class that will update lists
     def update(self, delta_time: float):
@@ -565,12 +583,16 @@ class MyGame(arcade.Window):
             self.score += 1
             self.coin_sound_player = arcade.play_sound(coin_sound)
         self.coin_list.update()
+        self.tree_list.update()
+        self.house_list.update()
         self.physics_engine00.update()
         self.physics_engine01.update()
         self.physics_engine02.update()
         self.physics_engine03.update()
+        self.physics_engine04.update()
 
-    # when key is pressed, method in MyGame class
+        # when key is pressed, method in MyGame class
+
     def on_key_press(self, key: int, modifiers: int):
         if key == arcade.key.A:
             self.player_sprite.change_x = -MOVEMENT_SPEED
@@ -600,7 +622,8 @@ class MyGame(arcade.Window):
         self.tree_list.draw()
         # creates score board
         result = f" Score: {self.score}"
-        arcade.draw_text(self.score, 20, 30, arcade.color.BLACK, 20, 5)
+        arcade.draw_text(self.score, 750, 550, arcade.color.BLACK, 20, 5)
+
 
 def main():
     window = MyGame()
