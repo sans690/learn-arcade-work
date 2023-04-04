@@ -16,14 +16,11 @@ SPRITE_GRASS_SCALING = 0.9
 # Amount
 COIN_COUNT = 50
 TREE_COUNT = 30
-# Sound and the sound player
+# Sound
 coin_sound = arcade.load_sound("Lab 9 - Resources/sounds/arcade_resources_sounds_coin2.wav")
-coin_sound_player = None
+bump_sound = arcade.load_sound("Lab 9 - Resources/sounds/jump.wav", False)
 # sound from Nintendo
 theme_sound = arcade.load_sound("Lab 9 - Resources/sounds/Pallet Town Theme.wav", False)
-theme_sound_player = None
-bump_sound = arcade.load_sound("Lab 9 - Resources/sounds/jump.wav", False)
-bump_sound_player = None
 # how many pixels to keep between the character and screen edge
 VIEWPORT_MARGIN = 220
 # camera moves how fast to the player
@@ -88,8 +85,6 @@ class House(arcade.Sprite):
 class Coin(arcade.Sprite):
     def __init__(self, filename, SPRITE_COIN_SCALING):
         super(Coin, self).__init__(filename, SPRITE_COIN_SCALING)
-        # attribute of the Coin class, the coin image
-        self.coin_sprite = None
         # attribute of the Coin class, position on the coins
         self.center_x = 0
         self.center_y = 0
@@ -169,14 +164,14 @@ class MyGame(arcade.Window):
         # calls the parent class
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "SPRITES AND WALLS")
         # variables that holds physics engine
+        self.player_hit_list = None
         self.player_sprite = None
         self.physics_engine = None
         self.physics_engine1 = None
         self.physics_engine2 = None
         self.physics_engine3 = None
         self.physics_engine4 = None
-        # variable that hold house info
-        self.house_sprite = None
+        self.bump_sound_player = None
         # variable that hold score info
         self.score = 0
         # variable hold info for sound player
@@ -187,24 +182,17 @@ class MyGame(arcade.Window):
         # gives the list the functions/methods/attributes of the class
         self.fence_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
-        self.wall_hit_list = arcade.SpriteList()
         self.player_list = arcade.SpriteList()
         self.grass_list = arcade.SpriteList()
         self.npc_list = arcade.SpriteList()
         self.house_list = arcade.SpriteList()
-        self.player_hit_list = arcade.SpriteList()
         self.tree_list = arcade.SpriteList()
-        self.tree_hit_list = arcade.Sprite()
-        self.tree_hit_list1 = arcade.Sprite()
-        self.house_hit_tree_list = arcade.SpriteList()
-        self.house_hit_tree_list1 = arcade.SpriteList()
-        self.crab_hit_list = arcade.SpriteList
 
     def setup(self):
         # sets background
         arcade.set_background_color(arcade.color.WHITE)
         # plays theme_sound
-        arcade.play_sound(theme_sound)
+        arcade.play_sound(theme_sound, volume=0.3)
         for coin in range(COIN_COUNT):
             # variable that defines the image of the coin, instance creation
             coin = Coin("Lab 9 - Resources/coinGold_ul copy.png", SPRITE_COIN_SCALING)
@@ -219,7 +207,9 @@ class MyGame(arcade.Window):
                 fence_hit_list = arcade.check_for_collision_with_list(coin, self.fence_list)
                 # See if the coin is hitting another coin
                 coin_hit_list = arcade.check_for_collision_with_list(coin, self.coin_list)
-                if len(fence_hit_list) == 0 and len(coin_hit_list) == 0:
+                # See if coin is hitting a tree
+                coin_hit_tree_list = arcade.check_for_collision_with_list(coin, self.tree_list)
+                if len(fence_hit_list) == 0 and len(coin_hit_list) == 0 and len(coin_hit_tree_list) == 0:
                     # It is!
                     coin_placed_successfully = True
                     # Add the coin to the lists
@@ -685,13 +675,11 @@ class MyGame(arcade.Window):
         for coin in self.player_hit_list:
             coin.remove_from_sprite_lists()
             self.score += 1
-            self.coin_sound_player = arcade.play_sound(coin_sound)
-        self.player_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.fence_list)
-        # condition
-        for hit in self.player_hit_list:
-            arcade.play_sound(bump_sound, 100, 0, 0, 10 * 10)
-        self.player_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.tree_list)
-        self.player_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.house_list)
+            self.coin_sound_player = arcade.play_sound(coin_sound, volume=0.3)
+        self.player_hit_list2 = arcade.check_for_collision_with_list(self.player_sprite, self.fence_list)
+        for hit in self.player_hit_list2:
+            if not self.bump_sound_player or not self.bump_sound_player.playing:
+                self.bump_sound_player = arcade.play_sound(bump_sound, volume=1,)
         # condition
         for crab in self.npc_list:
             # makes crab follow player
