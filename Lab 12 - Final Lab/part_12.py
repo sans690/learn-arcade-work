@@ -18,7 +18,6 @@ class Player(arcade.Sprite):
 
     def __init__(self, filename, scale):
         super(Player, self).__init__(filename, scale)
-        self.player_sprite = None
         self.center_x = 0
         self.center_y = 0
         self.change_x = 0
@@ -30,15 +29,8 @@ class Player(arcade.Sprite):
         self.center_x += self.change_x
         # current y position = current y position plus the change to y
         self.center_y += self.change_y
-        # if player tries to move outside boundary, they are stopped
-        if self.center_x > 565:
-            self.center_x = 560
-        elif self.center_x < 10:
-            self.center_x = 15
-        elif self.center_y > 260:
-            self.center_y = 250
-        elif self.center_y < 10:
-            self.center_y = 15
+
+
 class NPC(arcade.Sprite):
     """Initializer"""
 
@@ -81,42 +73,70 @@ class MyGame(arcade.Window):
     def __init__(self):
         # calls that parent class arcade.Window and inherits the methods/attributes/functions of that class
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "Test")
-        self.set_location(400, 300)
         # sets attributes to the class
         # empty variables is set
-        self.scene = None
         self.tile_map = None
         self.player_sprite = None
         self.npc_sprite = None
         self.monster_sprite = None
         # creates camera for player
         self.camera_sprite = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.physics_engine = None
+        self.current_room = 0
 
         # lists
         self.player_sprite_list = arcade.SpriteList()
         self.npc_sprite_list = arcade.SpriteList()
         self.monster_sprite_list = arcade.SpriteList()
+        self.room_list = []
 
-    def load_level(self):
+    def load_level_kitchen(self):
         # tells attribute to equal arcade's library to do load_tilemap function
-        self.tile_map = arcade.load_tilemap("Inside Resources/KitchenTilemao.tmj", MAP_SCALING)
-        self.physicsengine = arcade.PhysicsEngineSimple(self.player_sprite, self.tile_map.sprite_lists["Objects"])
+        resource = "Inside Resources/KitchenTilemao.tmj"
+        objects = "Objects"
+        self.tile_map = arcade.load_tilemap(f"{resource}", MAP_SCALING)
+        self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.tile_map.sprite_lists[f"{objects}"])
+
+    def load_level_bedroom(self):
+        # tells attribute to equal arcade's library to do load_tilemap function
+        resource = "Inside Resources/BedroomTilemao.tmj"
+        objects = "Objects"
+        self.tile_map = arcade.load_tilemap(f"{resource}", MAP_SCALING)
+        self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.tile_map.sprite_lists[f"{objects}"])
 
     # sets up the game, defines the values for objects and anything else in the game
     def setup(self):
-        # sets up the player's value
         self.player_sprite = Player("output2.png", PLAYER_SCALING)
-        self.player_sprite.center_x = 480
-        self.player_sprite.center_y = 15
-        # player_sprite_list adds sprite give by self.player_sprite
-        self.player_sprite_list.append(self.player_sprite)
-        self.load_level()
+        self.player_sprite.center_x = 0
+        self.player_sprite.center_y = 0
+        if self.current_room == 0:
+            self.load_level_bedroom()
+            self.player_sprite.center_x = 200
+            self.player_sprite.center_y = 20
+            self.player_sprite_list.append(self.player_sprite)
+        if self.current_room == 1:
+            self.load_level_kitchen()
+            self.player_sprite.center_x = 480
+            self.player_sprite.center_y = 15
+            # player_sprite_list adds sprite give by self.player_sprite
+            self.player_sprite_list.append(self.player_sprite)
 
     def update(self, delta_time: float):
         self.player_sprite_list.update()
         # scrolls screen to player
         self.scroll_to_player()
-        self.physicsengine.update()
+        self.physics_engine.update()
+        # if player tries to move outside boundary, they are stopped
+        if self.current_room == 1:
+            if self.player_sprite.center_x > 565:
+                self.player_sprite.center_x = 560
+            elif self.player_sprite.center_x < 10:
+                self.player_sprite.center_x = 15
+            elif self.player_sprite.center_y > 260:
+                self.player_sprite.center_y = 255
+            elif self.player_sprite.center_y < 10:
+                self.player_sprite.center_y = 15
+                self.player_sprite_list.update()
 
     # when the key is pressed the player is moved
     def on_key_press(self, key: int, modifiers: int):
@@ -151,11 +171,16 @@ class MyGame(arcade.Window):
         arcade.start_render()
         # selects the camera to use for player sprite
         self.camera_sprite.use()
-        self.tile_map.sprite_lists["Tile Layer 1"].draw()
-        self.tile_map.sprite_lists["Carpets"].draw()
-        self.tile_map.sprite_lists["Objects"].draw()
-        self.player_sprite_list.draw()
         arcade.set_background_color((20, 20, 30))
+        if self.current_room == 0:
+            self.tile_map.sprite_lists["Tile Layer 1"].draw()
+            self.tile_map.sprite_lists["Objects"].draw()
+
+        if self.current_room == 1:
+            self.tile_map.sprite_lists["Tile Layer 1"].draw()
+            self.tile_map.sprite_lists["Carpets"].draw()
+            self.tile_map.sprite_lists["Objects"].draw()
+        self.player_sprite_list.draw()
 
 
 def main():
