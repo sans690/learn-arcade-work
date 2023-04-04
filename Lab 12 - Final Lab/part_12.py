@@ -95,6 +95,7 @@ class MyGame(arcade.Window):
         resource = "Inside Resources/KitchenTilemao.tmj"
         objects = "Objects"
         self.tile_map = arcade.load_tilemap(f"{resource}", MAP_SCALING)
+        self.room_list.append(self.tile_map)
         self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.tile_map.sprite_lists[f"{objects}"])
 
     def load_level_bedroom(self):
@@ -102,6 +103,7 @@ class MyGame(arcade.Window):
         resource = "Inside Resources/BedroomTilemao.tmj"
         objects = "Objects"
         self.tile_map = arcade.load_tilemap(f"{resource}", MAP_SCALING)
+        self.room_list.append(self.tile_map)
         self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.tile_map.sprite_lists[f"{objects}"])
 
     # sets up the game, defines the values for objects and anything else in the game
@@ -109,12 +111,16 @@ class MyGame(arcade.Window):
         self.player_sprite = Player("output2.png", PLAYER_SCALING)
         self.player_sprite.center_x = 0
         self.player_sprite.center_y = 0
+        # condition
+        # if the current room is 0, then do this code
         if self.current_room == 0:
             self.load_level_bedroom()
-            self.player_sprite.center_x = 200
-            self.player_sprite.center_y = 20
+            self.player_sprite.center_x = 180
+            self.player_sprite.center_y = 100
             self.player_sprite_list.append(self.player_sprite)
-        if self.current_room == 1:
+        # condition
+        # if the current room is 1, then do this code
+        elif self.current_room == 1:
             self.load_level_kitchen()
             self.player_sprite.center_x = 480
             self.player_sprite.center_y = 15
@@ -126,16 +132,33 @@ class MyGame(arcade.Window):
         # scrolls screen to player
         self.scroll_to_player()
         self.physics_engine.update()
+        if self.current_room == 0:
+            if self.player_sprite.center_x > 280:
+                self.player_sprite.center_x = 280
+            elif self.player_sprite.center_x < 10:
+                self.player_sprite.center_x = 10
+            elif self.player_sprite.center_y > 270:
+                self.player_sprite.center_y = 270
+                while self.player_sprite.center_y >= 270 and self.player_sprite.center_x >= 230 and self.current_room == 0:
+                    self.current_room = 1
+                    self.load_level_kitchen()
+                    self.player_sprite.center_x = 480
+                    self.player_sprite.center_y = 15
+            elif self.player_sprite.center_y < 10:
+                self.player_sprite.center_y = 20
+                self.player_sprite_list.update()
+        # condition
+        # if the current room is 1, then do this code
         # if player tries to move outside boundary, they are stopped
         if self.current_room == 1:
-            if self.player_sprite.center_x > 565:
+            if self.player_sprite.center_x > 560:
                 self.player_sprite.center_x = 560
             elif self.player_sprite.center_x < 10:
-                self.player_sprite.center_x = 15
-            elif self.player_sprite.center_y > 260:
-                self.player_sprite.center_y = 255
+                self.player_sprite.center_x = 10
+            elif self.player_sprite.center_y > 265:
+                self.player_sprite.center_y = 265
             elif self.player_sprite.center_y < 10:
-                self.player_sprite.center_y = 15
+                self.player_sprite.center_y = 20
                 self.player_sprite_list.update()
 
     # when the key is pressed the player is moved
@@ -172,15 +195,22 @@ class MyGame(arcade.Window):
         # selects the camera to use for player sprite
         self.camera_sprite.use()
         arcade.set_background_color((20, 20, 30))
+        # condition
+        # if the current room is 0, then do this code
         if self.current_room == 0:
             self.tile_map.sprite_lists["Tile Layer 1"].draw()
+            self.tile_map.sprite_lists["Carpets"].draw()
             self.tile_map.sprite_lists["Objects"].draw()
 
+        # condition
+        # if the current room is 1, then do this code
         if self.current_room == 1:
             self.tile_map.sprite_lists["Tile Layer 1"].draw()
             self.tile_map.sprite_lists["Carpets"].draw()
             self.tile_map.sprite_lists["Objects"].draw()
+
         self.player_sprite_list.draw()
+
 
 
 def main():
