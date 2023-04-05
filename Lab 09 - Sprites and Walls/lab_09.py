@@ -19,7 +19,7 @@ TREE_COUNT = 30
 # Sound
 coin_sound = arcade.load_sound("Lab 9 - Resources/sounds/arcade_resources_sounds_coin2.wav")
 bump_sound = arcade.load_sound("Lab 9 - Resources/sounds/jump.wav", False)
-# sound from Nintendo
+# Sound from Nintendo
 theme_sound = arcade.load_sound("Lab 9 - Resources/sounds/Pallet Town Theme.wav", False)
 # how many pixels to keep between the character and screen edge
 VIEWPORT_MARGIN = 220
