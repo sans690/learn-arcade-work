@@ -109,11 +109,15 @@ class MyGame(arcade.Window):
         self.player_sprite = Player("output2.png", PLAYER_SCALING)
         self.player_sprite.center_x = 0
         self.player_sprite.center_y = 0
+        # condition
+        # if the current room is 0, then do this code
         if self.current_room == 0:
             self.load_level_bedroom()
             self.player_sprite.center_x = 200
             self.player_sprite.center_y = 20
             self.player_sprite_list.append(self.player_sprite)
+            # condition
+            # if the current room is 1, then do this code
         if self.current_room == 1:
             self.load_level_kitchen()
             self.player_sprite.center_x = 480
@@ -126,6 +130,8 @@ class MyGame(arcade.Window):
         # scrolls screen to player
         self.scroll_to_player()
         self.physics_engine.update()
+        # condition
+        # if the current room is 0, then do this code
         if self.current_room == 0:
             if self.player_sprite.center_x > 280:
                 self.player_sprite.center_x = 280
