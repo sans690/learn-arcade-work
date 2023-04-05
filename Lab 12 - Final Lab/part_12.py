@@ -4,10 +4,10 @@ from pyglet.math import Vec2
 # --Constants--
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-PLAYER_MOVEMENT_SPEED = 1.8
+PLAYER_MOVEMENT_SPEED = 1.3
 MAP_SCALING = 1.8
 PLAYER_SCALING = .05
-CAMERA_SPEED = 1
+CAMERA_SPEED = 0.040
 # how many pixels to keep between the character and screen edge
 VIEWPORT_MARGIN = 250
 
@@ -83,43 +83,44 @@ class MyGame(arcade.Window):
         self.camera_sprite = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.physics_engine = None
         self.current_room = 0
-
         # lists
         self.player_sprite_list = arcade.SpriteList()
         self.npc_sprite_list = arcade.SpriteList()
         self.monster_sprite_list = arcade.SpriteList()
         self.room_list = []
 
-    def load_level_kitchen(self):
-        # tells attribute to equal arcade's library to do load_tilemap function
-        resource = "Inside Resources/KitchenTilemap.tmj"
-        objects = "Objects"
-        self.tile_map = arcade.load_tilemap(f"{resource}", MAP_SCALING)
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.tile_map.sprite_lists[f"{objects}"])
-
-    def load_level_bedroom(self):
-        # tells attribute to equal arcade's library to do load_tilemap function
-        resource = "Inside Resources/BedroomTilemap.tmj"
-        objects = "Objects"
-        self.tile_map = arcade.load_tilemap(f"{resource}", MAP_SCALING)
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.tile_map.sprite_lists[f"{objects}"])
+    def load_level(self):
+        if self.current_room == 0:
+            resource = "Inside Resources/BedroomTilemap.tmj"
+            objects = "Objects"
+            # tells attribute to equal arcade's library to do load_tilemap function
+            self.tile_map = arcade.load_tilemap(f"{resource}", MAP_SCALING)
+            self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
+                                                             self.tile_map.sprite_lists[f"{objects}"])
+        if self.current_room == 1:
+            resource = "Inside Resources/KitchenTilemap.tmj"
+            objects = "Objects"
+            # tells attribute to equal arcade's library to do load_tilemap function
+            self.tile_map = arcade.load_tilemap(f"{resource}", MAP_SCALING)
+            self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.tile_map.sprite_lists[f"{objects}"])
 
     # sets up the game, defines the values for objects and anything else in the game
     def setup(self):
-        self.player_sprite = Player("output2.png", PLAYER_SCALING)
+        self.player_sprite = Player("Player Resources/output2.png", PLAYER_SCALING)
         self.player_sprite.center_x = 0
         self.player_sprite.center_y = 0
         # condition
         # if the current room is 0, then do this code
         if self.current_room == 0:
-            self.load_level_bedroom()
+            self.load_level()
             self.player_sprite.center_x = 200
             self.player_sprite.center_y = 20
             self.player_sprite_list.append(self.player_sprite)
-            # condition
-            # if the current room is 1, then do this code
-        if self.current_room == 1:
-            self.load_level_kitchen()
+        # condition
+        # if the current room is 1, then do this code
+        elif self.current_room == 1:
+            self.current_room = 1
+            self.load_level()
             self.player_sprite.center_x = 480
             self.player_sprite.center_y = 15
             # player_sprite_list adds sprite give by self.player_sprite
@@ -134,32 +135,43 @@ class MyGame(arcade.Window):
         # if the current room is 0, then do this code
         if self.current_room == 0:
             if self.player_sprite.center_x > 280:
-                self.player_sprite.center_x = 280
+                self.player_sprite.center_x = 275
             elif self.player_sprite.center_x < 10:
                 self.player_sprite.center_x = 10
             elif self.player_sprite.center_y > 280:
-                self.player_sprite.center_y = 275
-                while self.player_sprite.center_y >= 275 and self.player_sprite.center_x >= 230 and self.current_room == 0:
-                    self.current_room = 1
-                    self.load_level_kitchen()
+                self.player_sprite.center_y = 280
+                while self.player_sprite.center_y >= 275 and self.player_sprite.center_x >= 210 and self.current_room == 0\
+                        and self.player_sprite.center_x <= 280:
+                    self.current_room += 1
+                    self.load_level()
                     self.player_sprite.center_x = 480
                     self.player_sprite.center_y = 15
             elif self.player_sprite.center_y < 10:
-                self.player_sprite.center_y = 20
+                self.player_sprite.center_y = 15
                 self.player_sprite_list.update()
         # condition
         # if the current room is 1, then do this code
         # if player tries to move outside boundary, they are stopped
         if self.current_room == 1:
             if self.player_sprite.center_x > 560:
-                self.player_sprite.center_x = 560
+                self.player_sprite.center_x = 555
             elif self.player_sprite.center_x < 10:
                 self.player_sprite.center_x = 10
             elif self.player_sprite.center_y > 265:
                 self.player_sprite.center_y = 265
             elif self.player_sprite.center_y < 10:
-                self.player_sprite.center_y = 20
-                self.player_sprite_list.update()
+                self.player_sprite.center_y = 15
+
+                while self.player_sprite.center_y <= 15 and self.player_sprite.center_x >= 450 and\
+                        self.current_room == 1 and self.player_sprite.center_x <= 515:
+                    self.current_room -= 1
+                    self.load_level()
+                    self.player_sprite.center_x = 230
+                    self.player_sprite.center_y = 278
+
+
+
+            self.player_sprite_list.update()
 
     # when the key is pressed the player is moved
     def on_key_press(self, key: int, modifiers: int):
