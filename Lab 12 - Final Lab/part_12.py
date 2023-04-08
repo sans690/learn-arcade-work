@@ -1,5 +1,8 @@
 import arcade
 from pyglet.math import Vec2
+import update_function
+import setup_function
+import load_level_function
 
 # --Constants--
 SCREEN_WIDTH = 800
@@ -7,7 +10,7 @@ SCREEN_HEIGHT = 600
 PLAYER_MOVEMENT_SPEED = 1.3
 MAP_SCALING = 1.8
 PLAYER_SCALING = .05
-CAMERA_SPEED = 0.040
+CAMERA_SPEED = 0.090
 # how many pixels to keep between the character and screen edge
 VIEWPORT_MARGIN = 250
 
@@ -82,7 +85,10 @@ class MyGame(arcade.Window):
         # creates camera for player
         self.camera_sprite = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.physics_engine = None
-        self.current_room = 0
+        self.physics_engine1 = None
+        self.physics_engine2 = None
+        self.physics_engine3 = None
+        self.current_room = 1
         # lists
         self.player_sprite_list = arcade.SpriteList()
         self.npc_sprite_list = arcade.SpriteList()
@@ -90,88 +96,14 @@ class MyGame(arcade.Window):
         self.room_list = []
 
     def load_level(self):
-        if self.current_room == 0:
-            resource = "Inside Resources/BedroomTilemap.tmj"
-            objects = "Objects"
-            # tells attribute to equal arcade's library to do load_tilemap function
-            self.tile_map = arcade.load_tilemap(f"{resource}", MAP_SCALING)
-            self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
-                                                             self.tile_map.sprite_lists[f"{objects}"])
-        if self.current_room == 1:
-            resource = "Inside Resources/KitchenTilemap.tmj"
-            objects = "Objects"
-            # tells attribute to equal arcade's library to do load_tilemap function
-            self.tile_map = arcade.load_tilemap(f"{resource}", MAP_SCALING)
-            self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.tile_map.sprite_lists[f"{objects}"])
+        load_level_function.load_level(self)
 
     # sets up the game, defines the values for objects and anything else in the game
     def setup(self):
-        self.player_sprite = Player("Player Resources/output2.png", PLAYER_SCALING)
-        self.player_sprite.center_x = 0
-        self.player_sprite.center_y = 0
-        # condition
-        # if the current room is 0, then do this code
-        if self.current_room == 0:
-            self.load_level()
-            self.player_sprite.center_x = 200
-            self.player_sprite.center_y = 20
-            self.player_sprite_list.append(self.player_sprite)
-        # condition
-        # if the current room is 1, then do this code
-        elif self.current_room == 1:
-            self.current_room = 1
-            self.load_level()
-            self.player_sprite.center_x = 480
-            self.player_sprite.center_y = 15
-            # player_sprite_list adds sprite give by self.player_sprite
-            self.player_sprite_list.append(self.player_sprite)
+        setup_function.setup(self)
 
     def update(self, delta_time: float):
-        self.player_sprite_list.update()
-        # scrolls screen to player
-        self.scroll_to_player()
-        self.physics_engine.update()
-        # condition
-        # if the current room is 0, then do this code
-        if self.current_room == 0:
-            if self.player_sprite.center_x > 280:
-                self.player_sprite.center_x = 275
-            elif self.player_sprite.center_x < 10:
-                self.player_sprite.center_x = 10
-            elif self.player_sprite.center_y > 280:
-                self.player_sprite.center_y = 280
-                while self.player_sprite.center_y >= 275 and self.player_sprite.center_x >= 210 and self.current_room == 0\
-                        and self.player_sprite.center_x <= 280:
-                    self.current_room += 1
-                    self.load_level()
-                    self.player_sprite.center_x = 480
-                    self.player_sprite.center_y = 15
-            elif self.player_sprite.center_y < 10:
-                self.player_sprite.center_y = 15
-                self.player_sprite_list.update()
-        # condition
-        # if the current room is 1, then do this code
-        # if player tries to move outside boundary, they are stopped
-        if self.current_room == 1:
-            if self.player_sprite.center_x > 560:
-                self.player_sprite.center_x = 555
-            elif self.player_sprite.center_x < 10:
-                self.player_sprite.center_x = 10
-            elif self.player_sprite.center_y > 265:
-                self.player_sprite.center_y = 265
-            elif self.player_sprite.center_y < 10:
-                self.player_sprite.center_y = 15
-
-                while self.player_sprite.center_y <= 15 and self.player_sprite.center_x >= 450 and\
-                        self.current_room == 1 and self.player_sprite.center_x <= 515:
-                    self.current_room -= 1
-                    self.load_level()
-                    self.player_sprite.center_x = 230
-                    self.player_sprite.center_y = 278
-
-
-
-            self.player_sprite_list.update()
+        update_function.update(self)
 
     # when the key is pressed the player is moved
     def on_key_press(self, key: int, modifiers: int):
@@ -211,11 +143,19 @@ class MyGame(arcade.Window):
             self.tile_map.sprite_lists["Tile Layer 1"].draw()
             self.tile_map.sprite_lists["Carpets"].draw()
             self.tile_map.sprite_lists["Objects"].draw()
-
-        if self.current_room == 1:
+        elif self.current_room == 1:
             self.tile_map.sprite_lists["Tile Layer 1"].draw()
             self.tile_map.sprite_lists["Carpets"].draw()
             self.tile_map.sprite_lists["Objects"].draw()
+        elif self.current_room == 2:
+            self.tile_map.sprite_lists["Grass"].draw()
+            self.tile_map.sprite_lists["Wall(for collision)"].draw()
+            self.tile_map.sprite_lists["Objects"].draw()
+            self.tile_map.sprite_lists["Fence"].draw()
+            self.tile_map.sprite_lists["Bushes"].draw()
+            self.tile_map.sprite_lists["Trees(with collision)"].draw()
+            self.tile_map.sprite_lists["Buildings"].draw()
+
         self.player_sprite_list.draw()
 
 
@@ -227,4 +167,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
