@@ -4,11 +4,12 @@ import update_function
 import setup_function
 import load_level_function
 
+
 # --Constants--
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-PLAYER_MOVEMENT_SPEED = 1.3
-MAP_SCALING = 1.8
+PLAYER_MOVEMENT_SPEED = 1
+MAP_SCALING = 1
 PLAYER_SCALING = .05
 CAMERA_SPEED = 0.090
 # how many pixels to keep between the character and screen edge
@@ -85,10 +86,11 @@ class MyGame(arcade.Window):
         # creates camera for player
         self.camera_sprite = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.physics_engine = None
-        self.physics_engine1 = None
-        self.physics_engine2 = None
-        self.physics_engine3 = None
-        self.current_room = 1
+        self.physics_engine001 = None
+        self.physics_engine002 = None
+        self.physics_engine003 = None
+        self.physics_engine004 = None
+        self.current_room = 3
         # lists
         self.player_sprite_list = arcade.SpriteList()
         self.npc_sprite_list = arcade.SpriteList()
@@ -139,22 +141,35 @@ class MyGame(arcade.Window):
         # selects the camera to use for player sprite
         self.camera_sprite.use()
         arcade.set_background_color((20, 20, 30))
+
+        # Bedroom
         if self.current_room == 0:
             self.tile_map.sprite_lists["Tile Layer 1"].draw()
             self.tile_map.sprite_lists["Carpets"].draw()
+            self.tile_map.sprite_lists["Tables"].draw()
             self.tile_map.sprite_lists["Objects"].draw()
+        # Downstairs
         elif self.current_room == 1:
             self.tile_map.sprite_lists["Tile Layer 1"].draw()
             self.tile_map.sprite_lists["Carpets"].draw()
             self.tile_map.sprite_lists["Objects"].draw()
+            self.tile_map.sprite_lists["Tables"].draw()
+        # Outside
         elif self.current_room == 2:
-            self.tile_map.sprite_lists["Grass"].draw()
-            self.tile_map.sprite_lists["Wall(for collision)"].draw()
+            self.tile_map.sprite_lists["Tile Layer 1"].draw()
+            self.tile_map.sprite_lists["Trees"].draw()
             self.tile_map.sprite_lists["Objects"].draw()
             self.tile_map.sprite_lists["Fence"].draw()
-            self.tile_map.sprite_lists["Bushes"].draw()
             self.tile_map.sprite_lists["Trees(with collision)"].draw()
             self.tile_map.sprite_lists["Buildings"].draw()
+        # Wild
+        elif self.current_room == 3:
+            self.tile_map.sprite_lists["Tile Layer 1"].draw()
+            self.tile_map.sprite_lists["Fence"].draw()
+            self.tile_map.sprite_lists["Trees(with collision)"].draw()
+            self.tile_map.sprite_lists["Grass"].draw()
+            self.tile_map.sprite_lists["Trees"].draw()
+            self.tile_map.sprite_lists["Objects"].draw()
 
         self.player_sprite_list.draw()
 
