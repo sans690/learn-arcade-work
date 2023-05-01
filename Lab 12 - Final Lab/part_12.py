@@ -168,7 +168,7 @@ class MyGame(arcade.Window):
         # creates camera for player
         self.camera_sprite = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.physics_engine = None
-        self.current_room = 3
+        self.current_room = 0
         # lists
         self.monster_sprite_list = arcade.SpriteList()
         self.room_list = []
