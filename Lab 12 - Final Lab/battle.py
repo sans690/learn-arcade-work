@@ -1,3 +1,4 @@
+import time
 import pygame
 from dialogue import text, options, attack_options, bag_options, run_option, pokemon_option
 import arcade
@@ -149,7 +150,7 @@ def main(self=Player):
     #  https: // www.spriters - resource.com / ds_dsi / pokemonheartgoldsoulsilver / sheet / 30540 /
     # player health bar
     player_healthbar_image = pygame.image.load("Battle Resources/pngs/playerhealthbar.png")
-    screen.blit(player_healthbar_image, (500, 315))
+    screen.blit(player_healthbar_image, (500, 330))
 
     while True:
         text_surface = [font.render(user_pokemon_name, True, (0, 0, 0)), font.render(foe_pokemon_name, True, (0, 0, 0)),
@@ -165,153 +166,90 @@ def main(self=Player):
         clock.tick(10)  # times per second, delays for the time till next frame point
 
         draw_buffer.blit(text_surface[0], (10, 85)) and draw_buffer.blit(text_surface[1], (555, 350)), draw_buffer.blit(
-            text_surface[2], (755, 347)), draw_buffer.blit(text_surface[3], (200, 85))
+            text_surface[2], (755, 360)), draw_buffer.blit(text_surface[3], (200, 85))
 
-        pygame.display.update()  # copy rects from buffer to screen
-
+        pygame.display.update()
+        text_line = "A foe wants to battle!"
+        text_surface = font.render(text_line, True, (0, 0, 0))
+        draw_buffer.blit(text_surface, (40, 470))
+        delay = 100
+        pygame.time.delay(delay)
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 text()
-                event_happens = True
-                pygame.time.set_timer(event, 0, loops=0)
 
-                """if event_happens and text():
-                    draw_buffer.fill(pygame.Color("Black"))
-                    screen.blit(pygame.image.load("Battle Resources/pngs/Battle Backgrounds(edited).png"))
-                    options()
-                next_turn = 0
-                player_turn = 0
-                foe_turn = 1
-                if player_turn:
-                    def on_key_press(key):
-                        if key == arcade.key.A:
-                            attack_options()
-                            if key == arcade.key.T:
-                                for i in range(2):
-                                    if i == 0:
-                                        text_line2 = "It was effective."
-                                        text2 = font.render(text_line2, True, (0, 0, 0))
-                                        draw_buffer.blit(text2, (50, 480))
-                                        damage = 100
-                                        Player.pokemon_health = Player.pokemon_health
-                                        for i in range(damage):
-                                            damage_to_pokemon = Player.pokemon_health - i
-                                            Player.pokemon_health -= damage_to_pokemon
-                                            player_turn + 1
-                                    elif i == 1:
-                                        text_line3 = "It was not effective."
-                                        text3 = font.render(text_line3, True, (0, 0, 0))
-                                        draw_buffer.blit(text3, (50, 480))
-                                        Player.pokemon_health = Player.pokemon_health
-                                        player_turn + 1
-                        elif key == arcade.key.B:
-                            bag_options()
-                        elif key == arcade.key.P:
-                            pokemon_option()
-                        elif key == arcade.key.R:
-                            run_option()
-                    next_turn = player_turn + 1
+                delay = 600
+                pygame.time.delay(delay)
+                draw_buffer.blit(screen, (0, 0))
+                options()
 
-                elif foe_turn:
-                    for i in range(2):
-                        if i == 0:
-                            text_line2 = "Foe uses tackle, it was effective."
-                            text2 = font.render(text_line2, True, (0, 0, 0))
-                            draw_buffer.blit(text2, (50, 480))
-                            damage = 100
-                            NPC.pokemon_health = NPC.pokemon_health
-                            for i in range(damage):
-                                damage_to_pokemon = NPC.pokemon_health - i
-                                NPC.pokemon_health -= damage_to_pokemon
-                                next_turn = foe_turn - 1
-                        elif i == 1:
-                            text_line3 = "Foe uses tackle, it was not effective."
-                            text3 = font.render(text_line3, True, (0, 0, 0))
-                            draw_buffer.blit(text3, (50, 480))
-                            NPC.pokemon_health = NPC.pokemon_health
-                            next_turn = foe_turn - 1
-                    if Player.pokemon_health or NPC.pokemon_health == 100:
-                        battle = False
-                        pygame.display.quit()"""
+        #  if event.type == pygame.MOUSEBUTTONDOWN:
+        # screen.fill("white")
+        # draw_buffer.fill("white")
+        #  time.sleep(0)
+        #  pygame.display.update()  # copy rects from buffer to screen
 
 
 if __name__ == '__main__':
     main()
 
-"""
-# code by HugoM25 on GitHub
-# https://github.com/HugoM25/Philomon/blob/master/Philomons/BattleScene_Classes.py
+    """next_turn = 0
+    player_turn = next_turn == 0
+    foe_turn = next_turn == 1
+    if player_turn:
+        for event in pygame.event.get():
+            if event.type == pygame.K_a:
+                attack_options()
+                pygame.display.update()
+                pygame.time.delay(delay)
+                draw_buffer.blit(screen, (0, 0))
 
-step = 0
-selection = True
-attacking = False
-escaping = False
-bag = False
-pokemons = False
-cursor.zone = 1
-endofthefight = False
-finishing = False
-didOnce = False
-J1_faster = 0
-playing = True
-cursor = cursor.UI_cursor()
+              if key == arcade.key.A:
+                attack_options()
+                if key == arcade.key.T:
+                    for i in range(2):
+                        if i == 0:
+                            text_line2 = "It was effective."
+                            text2 = font.render(text_line2, True, (0, 0, 0))
+                            draw_buffer.blit(text2, (40, 470))
+                            damage = 100
+                            Player.pokemon_health = Player.pokemon_health
+                            for i in range(damage):
+                                damage_to_pokemon = Player.pokemon_health - i
+                                Player.pokemon_health -= damage_to_pokemon
+                                player_turn + 1
+                        elif i == 1:
+                            text_line3 = "It was not effective."
+                            text3 = font.render(text_line3, True, (0, 0, 0))
+                            draw_buffer.blit(text3, (40, 470))
+                            Player.pokemon_health = Player.pokemon_health
+                            player_turn + 1
+            elif key == arcade.key.B:
+                bag_options()
+            elif key == arcade.key.P:
+                pokemon_option()
+            elif key == arcade.key.R:
+                run_option()
+        next_turn = player_turn + 1
 
-            for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            if event.type == pygame.K_LEFT:
-                cursor.left()
-            if event.type == pygame.K_RIGHT:
-                cursor.right()
-            if event.type == pygame.K_UP:
-                cursor.up()
-            if event.type == pygame.K_DOWN:
-                cursor.down()
-            if event.type == pygame.K_ESCAPE:
-                didOnce = False
-                if selection == True:
-                    if cursor.zone == 1:
-                        if cursor.selected == "a":
-                            cursor.Menu_Attack(self, att1=Monster.attack)
-                            # if player attacks, return to menu
-                            text1 = font.render(text1_line, True, (0, 0, 0))
-                            text2 = font.render(text2_line, True, (0, 0, 0))
-                            text3 = font.render(text3_line, True, (0, 0, 0))
-                            text4 = font.render(text4_line, True, (0, 0, 0))
-                            cursor.zone = 2
-                        # if player picks pokemon zone
-                        if cursor.selected == "p":
-                            selection = False
-                            pokemons = True
-                            step = 0
-
-                        if cursor.selected == "r":
-                            selection = False
-                            pokemons = False
-                            step = 0
-                            escaping = True
-
-                        if cursor.selected == "b":
-                            selection = False
-                            escaping = False
-                            pokemons = False
-                            bag = True
-                            step = 0
-
-                    elif cursor.zone == 2:
-                        if cursor.selected == "a":
-                            selection = False
-                            attackname = Monster.attack
-
-                            attacking = True
-                            step = 0
-                    else:
-                        step += 1
-                if (event.key == pygame.K_ESCAPE):
-                    cursor.zone = 1
-                    cursor.Menu_Principal()
-                    text1 = font.render(text1_line, True, (0, 0, 0))
-                    text2 = font.render(text2_line, True, (0, 0, 0))
-                    text3 = font.render(text3_line, True, (0, 0, 0))
-                    text4 = font.render(text4_line, True, (0, 0, 0))"""
+    elif foe_turn:
+        for i in range(2):
+            if i == 0:
+                text_line2 = "Foe uses tackle, it was effective."
+                text2 = font.render(text_line2, True, (0, 0, 0))
+                draw_buffer.blit(text2, (40, 470))
+                damage = 100
+                NPC.pokemon_health = NPC.pokemon_health
+                for i in range(damage):
+                    damage_to_pokemon = NPC.pokemon_health - i
+                    NPC.pokemon_health -= damage_to_pokemon
+                    next_turn = foe_turn - 1
+            elif i == 1:
+                text_line3 = "Foe uses tackle, it was not effective."
+                text3 = font.render(text_line3, True, (0, 0, 0))
+                draw_buffer.blit(text3, (40, 470))
+                NPC.pokemon_health = NPC.pokemon_health
+                next_turn = foe_turn - 1
+        if Player.pokemon_health or NPC.pokemon_health == 100:
+            battle = False
+            pygame.display.quit()"""
