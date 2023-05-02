@@ -8,8 +8,8 @@ font = pygame.font.Font("Interface Resources/Orange kid.ttf", 25)
 
 def text():
     text_line = "A foe wants to battle!"
-    text_surface = font.render(text_line, True, (0, 0, 0))
-    draw_buffer.blit(text_surface, (40, 470))
+    text = font.render(text_line, True, (0, 0, 0))
+    draw_buffer.blit(text, (40, 470))
 
 
 def options():
@@ -34,9 +34,9 @@ def attack_options():
     text0 = font.render(text_line0, True, (0, 0, 0))
     draw_buffer.blit(text0, (50, 480))
 
-    text_line1 = "Bulbasaur used tackle."
-    text1 = font.render(text_line1, True, (0, 0, 0))
-    draw_buffer.blit(text1, (50, 480))
+    #text_line1 = "Bulbasaur used tackle."
+    #text1 = font.render(text_line1, True, (0, 0, 0))
+   # draw_buffer.blit(text1, (50, 480))
 
 
 def bag_options():
