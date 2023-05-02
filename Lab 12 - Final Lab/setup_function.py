@@ -56,3 +56,4 @@ def setup_game(self):
         self.player_sprite.center_x = 250
         self.player_sprite.center_y = 170
         enemy_here(self)
+        
