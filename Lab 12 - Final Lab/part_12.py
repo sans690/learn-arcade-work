@@ -1,8 +1,8 @@
 from pyglet.math import Vec2
 import update_function
 import setup_function
+import battle
 import arcade
-import load_level_function
 
 # --Constants--
 SCREEN_WIDTH = 800
@@ -21,7 +21,6 @@ class Player(arcade.Sprite):
 
     def __init__(self):
         super(Player, self).__init__()
-        self.pokemon_health = None
         self.player_sprite = None
         self.player_sprite_list = None
         self.scale = 0
@@ -62,19 +61,12 @@ class Player(arcade.Sprite):
             arcade.load_textures(file_name, image_location_list, True, hit_box_algorithm="Detailed")
         self.player_sprite_list.append(self.player_sprite)
 
-    def bag(self):
-        pass
-
-    def pokemon_health(self):
-        self.pokemon_health = 0
-
 
 class NPC(arcade.Sprite):
     """Initializer"""
 
     def __init__(self):
         super(NPC, self).__init__()
-        self.pokemon_health = None
         self.npc_sprite_list = None
         self.npc_sprite = None
         self.scale = 0
@@ -89,6 +81,7 @@ class NPC(arcade.Sprite):
         self.center_x += self.change_x
         # current y position = current y position plus the change to y
         self.center_y += self.change_y
+        battle()
 
     def setup_npc(self):
         # variable creates instance of arcade class SpriteList
@@ -123,12 +116,6 @@ class NPC(arcade.Sprite):
             arcade.load_textures(file_name, image_location_list, False, hit_box_algorithm="Detailed")
         self.npc_sprite_list.append(self.npc_sprite)
 
-    def bag(self):
-        pass
-
-    def pokemon_health(self):
-        self.pokemon_health = 0
-
 
 class Monster(arcade.Sprite):
     """Initializer"""
@@ -141,7 +128,6 @@ class Monster(arcade.Sprite):
         self.center_y = 0
         self.change_x = 0
         self.change_y = 0
-        self.name = None
 
     # method of Monster class that tells the class how to move when called
     def update(self):
@@ -149,9 +135,6 @@ class Monster(arcade.Sprite):
         self.center_x += self.change_x
         # current y position = current y position plus the change to y
         self.center_y += self.change_y
-
-    def health(self):
-        self.health = 0
 
 
 class MyGame(arcade.Window):
@@ -167,6 +150,7 @@ class MyGame(arcade.Window):
         self.monster_sprite = None
         # creates camera for player
         self.camera_sprite = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.camera_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.physics_engine = None
         self.current_room = 0
         # lists
@@ -282,3 +266,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
