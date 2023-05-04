@@ -3,6 +3,8 @@ import update_function
 import setup_function
 import battle
 import arcade
+import random
+
 
 # --Constants--
 SCREEN_WIDTH = 800
@@ -75,6 +77,7 @@ class NPC(arcade.Sprite):
         self.change_x = 0
         self.change_y = 0
 
+
     # method of NPC class that tells the class how to move when called
     def update(self):
         # current x position = current x position plus the change to x
@@ -122,25 +125,12 @@ class Monster(arcade.Sprite):
 
     def __init__(self):
         super(Monster, self).__init__()
-        self.scale = 0
-        self.health = 0
-        self.center_x = 0
-        self.center_y = 0
-        self.change_x = 0
-        self.change_y = 0
-
-    # method of Monster class that tells the class how to move when called
-    def update(self):
-        # current x position = current x position plus the change to x
-        self.center_x += self.change_x
-        # current y position = current y position plus the change to y
-        self.center_y += self.change_y
 
 
 class MyGame(arcade.Window):
     """Initializer"""
 
-    def __init__(self, ):
+    def __init__(self):
         # calls that parent class arcade.Window and inherits the methods/attributes/functions of that class
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "Something")
         # sets attributes to the class
@@ -153,9 +143,13 @@ class MyGame(arcade.Window):
         self.camera_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.physics_engine = None
         self.current_room = 0
+        self.pokemon_health = 100
+        self.enemy_health = 100
         # lists
         self.monster_sprite_list = arcade.SpriteList()
         self.room_list = []
+        self.pokemon_damage = 0
+        self.enemy_damage = 0
 
     def load_level(self):
         load_level_function.load_level(self)
@@ -266,4 +260,5 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
+
+
