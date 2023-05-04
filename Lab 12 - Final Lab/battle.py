@@ -1,17 +1,15 @@
-import time
 import pygame
-from dialogue import text, options, attack_options, bag_options, run_option, pokemon_option
 import arcade
 from setup_function import theme_song_player
 import random
-import part_12
+import sys
 
 # dirty sprite code by Professor Gerry Jenkins on YouTube and gerryjenkinslb on GitHub and
 # https://github.com/gerryjenkinslb/pygame_dirtysprites
 
 battle = True
 if battle:
-    # music credit to Nintendo and GameFreak
+    #  music credit to Nintendo and GameFreak
     sound_file = "Sound Resources/Assets_Sounds_Music_battle (vs trainer).wav"
     battle_sound = arcade.load_sound(sound_file, streaming=True)
 
@@ -135,8 +133,8 @@ def main(self=Player):
     my_sprites.clear(draw_buffer, screen)  # copy background to screen
 
     # music credit to Nintendo and GameFreak
-    if not battle_sound_player or not battle_sound_player.playing:
-        battle_sound_player = arcade.play_sound(battle_sound, looping=True)
+    if not battle_sound_player:
+        battle_sound_player = arcade.play_sound(battle_sound, looping=True, volume=10)
         if battle_sound_player:
             arcade.stop_sound(theme_song_player)
 
@@ -152,104 +150,196 @@ def main(self=Player):
     player_healthbar_image = pygame.image.load("Battle Resources/pngs/playerhealthbar.png")
     screen.blit(player_healthbar_image, (500, 330))
 
+    my_sprites.update()  # call update on all sprites
+
+    # for each dirty sprint, erase previous rect with background copy
+    # and then copy new sprite to buffer
+    rects = my_sprites.draw(draw_buffer)
+
     while True:
         text_surface = [font.render(user_pokemon_name, True, (0, 0, 0)), font.render(foe_pokemon_name, True, (0, 0, 0)),
                         font.render(user_pokemon_lvl, True, (0, 0, 0)), font.render(foe_pokemon_lvl, True, (0, 0, 0))]
-        if is_exit_event():
-            break  # break out of loop and exit
         my_sprites.update()  # call update on all sprites
 
         # for each dirty sprint, erase previous rect with background copy
         # and then copy new sprite to buffer
         rects = my_sprites.draw(draw_buffer)
 
+        if is_exit_event():
+            break  # break out of loop and exit
+
         clock.tick(10)  # times per second, delays for the time till next frame point
 
-        draw_buffer.blit(text_surface[0], (10, 85)) and draw_buffer.blit(text_surface[1], (555, 350)), draw_buffer.blit(
+        draw_buffer.blit(text_surface[0], (10, 85)) and draw_buffer.blit(text_surface[1], (555, 360)), draw_buffer.blit(
             text_surface[2], (755, 360)), draw_buffer.blit(text_surface[3], (200, 85))
 
+        # credit to furas on StackOverFlow for button layout
+        # https://stackoverflow.com/questions/41267799/switch-text-on-click-python-pygame-wih-a-functions-button
+        def button_check(button):
+            mouse = pygame.mouse.get_pos()
+            click = pygame.mouse.get_pressed()
+
+            if button['rect'].collidepoint(mouse):
+                if click[0] == 1 and button['action']:
+                    button['action']()
+
+        def button_draw(button):
+            mouse = pygame.mouse.get_pos()
+
+            if button['rect'].collidepoint(mouse):
+                color = button['ac']
+            else:
+                color = button['ic']
+
+            pygame.draw.rect(draw_buffer, color, button['rect'])
+
+            image, rect = text_objects(button['msg'], font)
+            rect.center = button['rect'].center
+            draw_buffer.blit(image, rect)
+
+        def text_objects(text, font):
+            image = font.render(text, True, "Black")
+            rect = image.get_rect()
+            return image, rect
+
+        def message_display(text):
+            image, rect = text_objects(text, font)
+            rect.center = game_display_rect.center
+            draw_buffer.blit(image, rect)
+            pygame.display.update()
+
+        def game_intro():
+            image, rect = text_objects("", font)
+            rect.center = game_display_rect.center
+            draw_buffer.blit(image, rect)
+
+            buttons = [
+                {
+                    'msg': 'Attack',
+                    'rect': pygame.Rect(30, 480, 100, 50),
+                    'ac': "White",
+                    'ic': "White",
+                    'action': game_loop,
+                },
+                {
+                    'msg': f'{self.pokemon_health}',
+                    'rect': pygame.Rect(695, 365, 30, 30),
+                    'ac': "Light Grey",
+                    'ic': "Light Grey",
+                    'action': None, },
+                {
+                    'msg': f'{self.enemy_health}',
+                    'rect': pygame.Rect(140, 90, 30, 30),
+                    'ac': "Light Grey",
+                    'ic': "Light Grey",
+                    'action': None, }
+            ]
+            while True:
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        button_check(buttons[0])
+                        button_check(buttons[1])
+                        button_check(buttons[2])
+                button_draw(buttons[0])
+                button_draw(buttons[1])
+                button_draw(buttons[2])
+                pygame.display.update()
+
+        def game_loop():
+            image, rect = text_objects("", font)
+            rect.center = (game_display_rect.centerx, 100)
+            draw_buffer.blit(image, rect)
+            buttons = [
+                {
+                    'msg': 'Tackle',
+                    'rect': pygame.Rect(30, 480, 100, 50),
+                    'ac': "White",
+                    'ic': 'White',
+                    'action': option2_loop}
+            ]
+            while True:
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        button_check(buttons[0])
+                button_draw(buttons[0])
+                pygame.display.update()
+        def option2_loop():
+            image, rect = text_objects("", font)
+            rect.center = (game_display_rect.centerx, 100)
+            draw_buffer.blit(image, rect)
+            coins = random.randint(10, 30)
+            coins_in_bag = 0
+            coins_in_bag += coins
+            won = False
+            defeated = False
+            while won is False or defeated is False:
+                text_line0 = "Effective."
+                if text_line0 and won is False:
+                    print(f'Your turn: You use tackle.')
+                    for i in range(1):
+                        randa_num = random.randrange(start=10, stop=25)
+                        self.pokemon_damage = randa_num
+                        print(f"You did {self.pokemon_damage} damage.")
+                        self.enemy_health -= self.pokemon_damage
+                    if self.enemy_health < 0:
+                        self.enemy_health = 0
+                        print(f"Enemy has {self.enemy_health} health.")
+                        print("Your opponent is defeated!")
+                        won = True
+                        if won:
+                            print("You won the battle!\n")
+                            if self.enemy_health == 0:
+                                print(f"Your opponent gives you {coins} coins.")
+                                delay_time = 1000
+                                pygame.time.delay(delay_time)
+                                battle = False
+                                if battle is False:
+                                    pygame.display.quit()
+                                    sys.exit()
+                else:
+                    print(f'Enemy pokemon is at {self.enemy_health} health.\n')
+                if won is False:
+                    print(f'Enemy turn: Your enemy uses tackle.')
+                    for i in range(1):
+                        randa_num = random.randrange(start=10, stop=25)
+                        self.enemy_damage = randa_num
+                        print(f"Enemy did {self.enemy_damage} damage.\n")
+                        self.pokemon_health -= self.enemy_damage
+                    if self.pokemon_health < 0:
+                        self.pokemon_health = 0
+                        print(f"Your pokemon has {self.pokemon_health} health.")
+                        print("You were defeated!")
+                        defeated = True
+                        if defeated:
+                            print("Your pokemon fainted!\n")
+                            delay_time = 500
+                            pygame.time.delay(delay_time)
+                            pygame.display.quit()
+                            sys.exit()
+                    else:
+                        print(f'Your pokemon is at {self.pokemon_health} health.')
+                buttons = [
+                    {
+                        'msg': text_line0,
+                        'rect': pygame.Rect(30, 480, 100, 50),
+                        'ac': "White",
+                        'ic': "White",
+                        'action': game_intro()
+                    }
+                ]
+                while True:
+                    for event in pygame.event.get():
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            button_check(buttons[0])
+                    button_draw(buttons[0])
+                    pygame.display.update()
+
+        game_display_rect = draw_buffer.get_rect()
+
+        game_intro()
+
         pygame.display.update()
-        text_line = "A foe wants to battle!"
-        text_surface = font.render(text_line, True, (0, 0, 0))
-        draw_buffer.blit(text_surface, (40, 470))
-        delay = 100
-        pygame.time.delay(delay)
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                text()
-
-                delay = 600
-                pygame.time.delay(delay)
-                draw_buffer.blit(screen, (0, 0))
-                options()
-
-        #  if event.type == pygame.MOUSEBUTTONDOWN:
-        # screen.fill("white")
-        # draw_buffer.fill("white")
-        #  time.sleep(0)
-        #  pygame.display.update()  # copy rects from buffer to screen
 
 
 if __name__ == '__main__':
     main()
-
-    """next_turn = 0
-    player_turn = next_turn == 0
-    foe_turn = next_turn == 1
-    if player_turn:
-        for event in pygame.event.get():
-            if event.type == pygame.K_a:
-                attack_options()
-                pygame.display.update()
-                pygame.time.delay(delay)
-                draw_buffer.blit(screen, (0, 0))
-
-              if key == arcade.key.A:
-                attack_options()
-                if key == arcade.key.T:
-                    for i in range(2):
-                        if i == 0:
-                            text_line2 = "It was effective."
-                            text2 = font.render(text_line2, True, (0, 0, 0))
-                            draw_buffer.blit(text2, (40, 470))
-                            damage = 100
-                            Player.pokemon_health = Player.pokemon_health
-                            for i in range(damage):
-                                damage_to_pokemon = Player.pokemon_health - i
-                                Player.pokemon_health -= damage_to_pokemon
-                                player_turn + 1
-                        elif i == 1:
-                            text_line3 = "It was not effective."
-                            text3 = font.render(text_line3, True, (0, 0, 0))
-                            draw_buffer.blit(text3, (40, 470))
-                            Player.pokemon_health = Player.pokemon_health
-                            player_turn + 1
-            elif key == arcade.key.B:
-                bag_options()
-            elif key == arcade.key.P:
-                pokemon_option()
-            elif key == arcade.key.R:
-                run_option()
-        next_turn = player_turn + 1
-
-    elif foe_turn:
-        for i in range(2):
-            if i == 0:
-                text_line2 = "Foe uses tackle, it was effective."
-                text2 = font.render(text_line2, True, (0, 0, 0))
-                draw_buffer.blit(text2, (40, 470))
-                damage = 100
-                NPC.pokemon_health = NPC.pokemon_health
-                for i in range(damage):
-                    damage_to_pokemon = NPC.pokemon_health - i
-                    NPC.pokemon_health -= damage_to_pokemon
-                    next_turn = foe_turn - 1
-            elif i == 1:
-                text_line3 = "Foe uses tackle, it was not effective."
-                text3 = font.render(text_line3, True, (0, 0, 0))
-                draw_buffer.blit(text3, (40, 470))
-                NPC.pokemon_health = NPC.pokemon_health
-                next_turn = foe_turn - 1
-        if Player.pokemon_health or NPC.pokemon_health == 100:
-            battle = False
-            pygame.display.quit()"""
