@@ -122,6 +122,7 @@ def update(self):
                 self.npc_sprite.center_y = self.player_sprite.center_y + 70 - PLAYER_MOVEMENT_SPEED
                 time.sleep(0.2)
             battle.main(self)
+
         if self.player_sprite.center_x > 1900:
             self.player_sprite.center_x = 1900
         elif self.player_sprite.center_x < 30:
@@ -166,4 +167,3 @@ def update(self):
             self.player_sprite.center_x = 320
             self.player_sprite.center_y = 825
             enemy_here(self)
-            
