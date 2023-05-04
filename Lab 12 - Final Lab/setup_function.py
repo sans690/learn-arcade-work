@@ -4,7 +4,7 @@ import arcade
 # music credit to Nintendo and GameFreak
 sound_file = "Sound Resources/Pallet Town Theme.wav"
 theme_song = arcade.load_sound(sound_file, True)
-theme_song_player = arcade.play_sound(theme_song, volume=30, looping=True)
+theme_song_player = arcade.play_sound(theme_song, volume=10, looping=True)
 
 
 def enemy_here(self):
@@ -56,4 +56,3 @@ def setup_game(self):
         self.player_sprite.center_x = 250
         self.player_sprite.center_y = 170
         enemy_here(self)
-        
